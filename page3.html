@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sam Seng Online Portal - Repeat Order</title>
+    <style>
+        :root {
+            --primary-orange: #ff4d2e;
+            --primary-hover: #fb3411;
+            --secondary-blue: #0046b4;
+            --bg-light: #f5f5f5;
+            --border-color: #e5e5e5;
+            --text-dark: #212121;
+            --text-muted: #757575;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: var(--bg-light); color: var(--text-dark); padding: 15px; }
+        .shopee-container { max-width: 1200px; margin: 0 auto; }
+        
+        .shopee-header { background: linear-gradient(-180deg, var(--primary-orange), #ff6633); color: white; padding: 15px 20px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+        .shopee-header h1 { font-size: 22px; font-weight: 700; }
+        .header-meta { display: flex; gap: 25px; font-size: 14px; align-items: center; flex-wrap: wrap; }
+        .lang-switch-span a { color: white; text-decoration: none; font-weight: normal; cursor: pointer; }
+        .lang-switch-span a.active { font-weight: bold; text-decoration: underline; }
+
+        .repeat-title-bar { background: white; padding: 15px 20px; border-radius: 6px; margin: 20px 0 15px 0; font-size: 18px; font-weight: 600; border-left: 4px solid var(--primary-orange); }
+        
+        .repeat-card { background: white; border-radius: 6px; padding: 20px; margin-bottom: 15px; box-shadow: 0 1px 3px rgba(0,0,0,0.03); }
+        .past-order-header { display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-bottom: 15px; font-size: 14px; flex-wrap: wrap; gap: 10px; }
+        .past-order-id { font-weight: 600; color: var(--secondary-blue); }
+
+        .table-responsive-wrapper { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; margin-bottom: 15px; }
+        .repeat-table { width: 100%; border-collapse: collapse; min-width: 500px; }
+        .repeat-table th { text-align: left; padding: 10px; font-size: 13px; color: var(--text-muted); border-bottom: 1px solid var(--border-color); font-weight: 500; }
+        .repeat-table td { padding: 12px 10px; font-size: 14px; border-bottom: 1px solid #f9f9f9; }
+        .text-right { text-align: right; }
+        .text-center { text-align: center; }
+
+        .img-thumb { width: 40px; height: 40px; border: 1px solid var(--border-color); border-radius: 4px; display: inline-flex; align-items: center; justify-content: center; background: #fafafa; font-size: 9px; color: #aaa; margin-right: 12px; font-weight: bold; }
+        .prod-cell { display: flex; align-items: center; }
+
+        .repeat-summary { margin-top: 15px; display: flex; flex-direction: column; align-items: flex-end; gap: 6px; font-size: 14px; }
+        .repeat-total-line { font-size: 16px; font-weight: 600; margin-top: 5px; }
+        .repeat-total-line .price { color: var(--primary-orange); font-size: 20px; font-weight: 700; }
+
+        .actions-row { margin-top: 25px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
+        .btn-cancel { background-color: transparent; color: #555; border: 1px solid #bcbcbc; padding: 12px 25px; font-size: 14px; border-radius: 4px; text-decoration: none; font-weight: 500; text-align: center; display: inline-block; min-height: 44px; line-height: 20px; }
+        .btn-cancel:hover { background: #eee; }
+        .btn-confirm-repeat { background: linear-gradient(90deg, #ff6633, var(--primary-orange)); color: white; border: none; padding: 14px 40px; font-size: 15px; font-weight: 600; border-radius: 4px; cursor: pointer; box-shadow: 0 2px 4px rgba(255, 77, 46, 0.2); min-height: 44px; }
+
+        @media (max-width: 576px) {
+            .shopee-header { flex-direction: column; text-align: center; }
+            .repeat-card { padding: 15px; }
+            .repeat-summary { align-items: stretch; }
+            .actions-row { flex-direction: column; align-items: stretch; }
+            .btn-cancel, .btn-confirm-repeat { width: 100%; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="shopee-container">
+    <header class="shopee-header">
+        <h1 id="txt-h1">Sam Seng Online Portal</h1>
+        <div class="header-meta">
+            <div class="lang-switch-span">
+                <span id="txt-lang-lbl">Language</span>: 
+                <a id="m-lang-en" onclick="setLang('en')">EN</a> / 
+                <a id="m-lang-zh" onclick="setLang('zh')">CN</a>
+            </div>
+            <div><span id="txt-user-lbl">User</span>: <strong id="txt-username">Customer Name</strong></div>
+        </div>
+    </header>
+
+    <div class="repeat-title-bar" id="txt-bar-title">Replicate Past Grocery Basket Selection</div>
+
+    <div class="repeat-card">
+        <div class="past-order-header">
+            <div><span id="txt-past-lbl">Target Order ID</span>: <span class="past-order-id" id="lblTargetOrderIdDisplay">#1001</span></div>
+            <div><span id="txt-date-lbl">Order Date</span>: <strong id="lblTargetOrderDateDisplay">08-May-2026</strong></div>
+        </div>
+
+        <div class="table-responsive-wrapper">
+            <table class="repeat-table">
+                <thead>
+                    <tr>
+                        <th id="th-name">Grocery Item Name</th>
+                        <th class="text-right" id="th-price">Unit Price</th>
+                        <th class="text-center" id="th-qty">Quantity</th>
+                        <th class="text-right" id="th-subtotal">Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody id="repeatTableBody">
+                    <!-- Generated Dynamically -->
+                </tbody>
+            </table>
+        </div>
+
+        <div class="repeat-summary">
+            <div><span id="txt-lbl-subtotal">Basket Subtotal</span>: SGD <span id="repSubtotal">0.00</span></div>
+            <div><span id="txt-lbl-shipping">Cold-Chain Delivery</span>: SGD 3.50</div>
+            <div><span id="txt-lbl-discount">Voucher Discount</span>: -SGD 10.00</div>
+            <div class="repeat-total-line">
+                <span id="txt-lbl-final">Total Bill Payment</span>: <span class="price">SGD <span id="repFinalTotal">0.00</span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="actions-row">
+        <a href="page4.html" class="btn-cancel" id="txt-btn-cancel">Cancel and Go Back</a>
+        <button class="btn-confirm-repeat" id="txt-btn-confirm" onclick="executeRepeatOrder()">Confirm & Re-add Grocery Basket</button>
+    </div>
+</div>
+
+<script>
+    let activeTargetItems = { "item-2": 2, "item-3": 1 };
+
+    const itemNames = {
+        en: [
+            "Fresh Premium Whole Milk (1L)", "Farm Fresh Grade A Eggs (10s)", "Premium Jasmine Fragrant Rice (5kg)",
+            "Organic Extra Virgin Olive Oil (500ml)", "Fresh Atlantic Salmon Fillet (250g)", "Sweet Fuji Apples (5s Pack)",
+            "Locally Grown Fresh Spinach (200g)", "Premium Angus Ribeye Steak (300g)", "Multi-Purpose Disinfectant Wipes (80s)",
+            "Ultra Soft 3-Ply Bathroom Tissue (10s)"
+        ],
+        zh: [
+            "全脂鲜牛奶 (1升装)", "农场大号新鲜A级鸡蛋 (10粒装)", "优质泰国香米 (5公斤袋装)",
+            "有机特级初榨橄榄油 (500毫升)", "新鲜大西洋三文鱼柳 (250克)", "鲜甜高山富士苹果 (5个精装)",
+            "当地菜园直供新鲜嫩菠菜 (200克)", "特级安格斯肉眼牛排 (300克原切)", "居家多用途高效消毒湿巾 (80张)",
+            "超柔软三层立体印花卫生纸 (10卷装)"
+        ]
+    };
+
+    const itemPrices = [3.95, 3.20, 14.80, 12.50, 11.90, 4.50, 1.80, 24.90, 5.50, 7.95];
+
+    const dictionary = {
+        en: {
+            title: "Sam Seng Online Portal", langLbl: "Language", userLbl: "User", username: "Customer Name",
+            barTitle: "Replicate Past Grocery Basket Selection", pastLbl: "Target Order ID", dateLbl: "Order Date",
+            thName: "Grocery Item Name", thPrice: "Unit Price", thQty: "Quantity", thSubtotal: "Subtotal",
+            lblSubtotal: "Basket Subtotal", lblShipping: "Cold-Chain Delivery", lblDiscount: "Voucher Discount",
+            lblFinal: "Total Bill Payment", btnCancel: "Cancel and Go Back", btnConfirm: "Confirm & Re-add Grocery Basket",
+            imgText: "Food", alertMsg: "Past grocery selections cloned back successfully into your live store cart!"
+        },
+        zh: {
+            title: "三盛网上超市", langLbl: "语言", userLbl: "用户", username: "贵宾顾客姓名",
+            barTitle: "复制并复刻选定的生鲜历史订单购物篮", pastLbl: "选定账单编号", dateLbl: "原交易日期",
+            thName: "商品名称", thPrice: "超市定价", thQty: "采购数量", thSubtotal: "账目分类小计",
+            lblSubtotal: "生鲜商品小计", lblShipping: "冷链物流快递费", lblDiscount: "优惠代码扣减",
+            lblFinal: "账单汇总实际扣款", btnCancel: "取消并回到总账账目表", btnConfirm: "确认一键复刻整单并加回购物车",
+            imgText: "生鲜百货", alertMsg: "历史账单中的超市生鲜货品已被完全复制至您当前的主页购物车内！"
+        }
+    };
+
+    function setLang(lang) {
+        localStorage.setItem('selectedLanguage', lang);
+        document.getElementById('m-lang-en').className = lang === 'en' ? 'active' : '';
+        document.getElementById('m-lang-zh').className = lang === 'zh' ? 'active' : '';
+
+        const d = dictionary[lang];
+        document.getElementById('txt-h1').textContent = d.title;
+        document.getElementById('txt-lang-lbl').textContent = d.langLbl;
+        document.getElementById('txt-user-lbl').textContent = d.userLbl;
+        document.getElementById('txt-username').textContent = d.username;
+        document.getElementById('txt-bar-title').textContent = d.barTitle;
+        document.getElementById('txt-past-lbl').textContent = d.pastLbl;
+        document.getElementById('txt-date-lbl').textContent = d.dateLbl;
+        document.getElementById('th-name').textContent = d.thName;
+        document.getElementById('th-price').textContent = d.thPrice;
+        document.getElementById('th-qty').textContent = d.thQty;
+        document.getElementById('th-subtotal').textContent = d.thSubtotal;
+        document.getElementById('txt-lbl-subtotal').textContent = d.lblSubtotal;
+        document.getElementById('txt-lbl-shipping').textContent = d.lblShipping;
+        document.getElementById('txt-lbl-discount').textContent = d.lblDiscount;
+        document.getElementById('txt-lbl-final').textContent = d.lblFinal;
+        document.getElementById('txt-btn-cancel').textContent = d.btnCancel;
+        document.getElementById('txt-btn-confirm').textContent = d.btnConfirm;
+
+        renderPayloadItems(lang);
+    }
+
+    function renderPayloadItems(lang) {
+        const tbody = document.getElementById('repeatTableBody');
+        tbody.innerHTML = '';
+        let subtotal = 0;
+
+        for (let i = 1; i <= 10; i++) {
+            const qty = activeTargetItems[`item-${i}`] || 0;
+            if (qty > 0) {
+                const name = itemNames[lang][i-1];
+                const price = itemPrices[i-1];
+                const itemSubtotal = qty * price;
+                subtotal += itemSubtotal;
+
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>
+                        <div class="prod-cell">
+                            <div class="img-thumb">[${dictionary[lang].imgText} ${i}]</div>
+                            <span><strong>${name}</strong></span>
+                        </div>
+                    </td>
+                    <td class="text-right">SGD ${price.toFixed(2)}</td>
+                    <td class="text-center">${qty}</td>
+                    <td class="text-right">SGD ${itemSubtotal.toFixed(2)}</td>
+                `;
+                tbody.appendChild(row);
+            }
+        }
+
+        document.getElementById('repSubtotal').textContent = subtotal.toFixed(2);
+        let finalPayment = subtotal + 3.50 - 10.00;
+        if(finalPayment < 0) finalPayment = 0;
+        document.getElementById('repFinalTotal').textContent = finalPayment.toFixed(2);
+    }
+
+    function executeRepeatOrder() {
+        const lang = localStorage.getItem('selectedLanguage') || 'en';
+        const newCartState = {};
+        for(let i = 1; i <= 10; i++) {
+            newCartState[`item-${i}`] = activeTargetItems[`item-${i}`] || 0;
+        }
+        localStorage.setItem('samSengCart', JSON.stringify(newCartState));
+        alert(dictionary[lang].alertMsg);
+        window.location.href = "page1.html";
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+        const runtimePayload = localStorage.getItem('samSengTargetRepeatData');
+        const runtimeId = localStorage.getItem('samSengTargetRepeatId');
+        const runtimeDate = localStorage.getItem('samSengTargetRepeatDate');
+        
+        if (runtimePayload) activeTargetItems = JSON.parse(runtimePayload);
+        if (runtimeId) document.getElementById('lblTargetOrderIdDisplay').textContent = runtimeId;
+        if (runtimeDate) document.getElementById('lblTargetOrderDateDisplay').textContent = runtimeDate;
+
+        setLang(localStorage.getItem('selectedLanguage') || 'en');
+    });
+</script>
+</body>
+</html>
