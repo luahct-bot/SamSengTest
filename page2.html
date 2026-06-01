@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sam Seng Web Page - Purchase Confirmation</title>
+    <style>
+        :root {
+            --primary-orange: #ff4d2e;
+            --primary-hover: #fb3411;
+            --secondary-blue: #0046b4;
+            --bg-light: #f5f5f5;
+            --border-color: #e5e5e5;
+            --text-dark: #212121;
+            --text-muted: #757575;
+            --card-shadow: 0 1px 3px rgba(0,0,0,0.03);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            padding: 20px 20px 60px 20px;
+            line-height: 1.4;
+        }
+
+        .shopee-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        /* Header Layout */
+        .shopee-header {
+            background: linear-gradient(-180deg, var(--primary-orange), #ff6633);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+
+        .shopee-header h1 {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .header-meta {
+            display: flex;
+            gap: 25px;
+            font-size: 14px;
+        }
+
+        /* Checkout Progress Title Bar */
+        .checkout-title-bar {
+            background: white;
+            padding: 15px 20px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            box-shadow: var(--card-shadow);
+            font-size: 18px;
+            font-weight: 600;
+            color: #222;
+            border-left: 4px solid var(--primary-orange);
+        }
+
+        /* Panel Block Layouts */
+        .checkout-section {
+            background: white;
+            border-radius: 6px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .section-title {
+            font-size: 15px;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 15px;
+            letter-spacing: 0.5px;
+        }
+
+        /* Delivery Address Styling */
+        .address-box {
+            display: flex;
+            gap: 15px;
+            font-size: 14px;
+        }
+
+        .address-box .user-info {
+            font-weight: 700;
+            min-width: 150px;
+        }
+
+        .address-box .address-text {
+            color: #333;
+        }
+
+        /* Table Review Basket Items */
+        .basket-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .basket-table th {
+            text-align: left;
+            padding: 12px 10px;
+            font-size: 14px;
+            color: var(--text-muted);
+            font-weight: 500;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .basket-table td {
+            padding: 15px 10px;
+            font-size: 14px;
+            vertical-align: middle;
+            border-bottom: 1px solid #fcfcfc;
+        }
+
+        .product-preview {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .product-img-placeholder {
+            width: 50px;
+            height: 50px;
+            background-color: #fafafa;
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            color: #bbb;
+            font-weight: bold;
+            border-radius: 4px;
+        }
+
+        .product-info-title {
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        /* Remarks Input Layout */
+        .remarks-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: #fafafa;
+            padding: 12px 15px;
+            border-top: 1px dashed var(--border-color);
+            margin-top: 10px;
+        }
+
+        .remarks-row label {
+            font-size: 14px;
+            color: #444;
+            white-space: nowrap;
+        }
+
+        .remarks-row input {
+            flex-grow: 1;
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 13px;
+        }
+
+        .remarks-row input:focus {
+            outline: none;
+            border-color: var(--primary-orange);
+        }
+
+        /* --- STYLED CONTAINER FROM PREVIOUS GOOD VERSION --- */
+        .payment-flex-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+        /* Stock Notice Bubble layout matching your drawing */
+        .stock-notice-bubble {
+            border: 2.5px solid #212121;
+            border-radius: 16px;
+            padding: 18px 25px;
+            width: 450px;
+            background-color: #ffffff;
+            display: none; /* Controlled dynamically by JavaScript below */
+        }
+
+        .stock-notice-bubble h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: #000000;
+            margin-bottom: 6px;
+        }
+
+        .stock-notice-bubble p {
+            font-size: 16px;
+            font-weight: 700;
+            color: #000000;
+        }
+
+        /* Payment Summary Blocks */
+        .payment-summary-box {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 12px;
+            flex-grow: 1;
+        }
+
+        .summary-line {
+            display: flex;
+            justify-content: flex-end;
+            width: 350px;
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .summary-line .label {
+            width: 200px;
+            text-align: right;
+            padding-right: 20px;
+        }
+
+        .summary-line .val {
+            width: 150px;
+            text-align: right;
+            color: var(--text-dark);
+        }
+
+        .summary-line.grand-total {
+            margin-top: 5px;
+            align-items: center;
+        }
+
+        .summary-line.grand-total .label {
+            font-size: 16px;
+            color: var(--text-dark);
+            font-weight: 500;
+        }
+
+        .summary-line.grand-total .val {
+            font-size: 26px;
+            font-weight: 700;
+            color: var(--primary-orange);
+        }
+
+        /* Interaction Buttons Footer Layout */
+        .checkout-actions {
+            margin-top: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .btn-back {
+            background-color: transparent;
+            color: #555;
+            border: 1px solid #bcbcbc;
+            padding: 12px 25px;
+            font-size: 14px;
+            font-weight: 500;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .btn-back:hover {
+            background-color: #eee;
+            color: #222;
+        }
+
+        .btn-place-order {
+            background: #ff4d2e;
+            color: white;
+            border: none;
+            padding: 14px 50px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-place-order:hover {
+            background: var(--primary-hover);
+        }
+    </style>
+</head>
+<body>
+
+<div class="shopee-container">
+    <header class="shopee-header">
+        <h1>Sam Seng Web Page</h1>
+        <div class="header-meta">
+            <div>Language: <strong>EN / CN</strong></div>
+            <div>User: <strong>Login User Name</strong></div>
+        </div>
+    </header>
+
+    <div class="checkout-title-bar">
+        Purchase Confirmation / Checkout Preview
+    </div>
+
+    <div class="checkout-section">
+        <div class="section-title">Delivery Address</div>
+        <div class="address-box">
+            <div class="user-info">Login User Name (+65 9123 4567)</div>
+            <div class="address-text">8 Temasek Boulevard, Suntec Tower Three, #42-01, Singapore 038988</div>
+        </div>
+    </div>
+
+    <div class="checkout-section">
+        <div class="section-title">Products Ordered</div>
+        
+        <table class="basket-table">
+            <thead>
+                <tr>
+                    <th style="width: 50%;">Product Name</th>
+                    <th class="text-right" style="width: 15%;">Unit Price</th>
+                    <th class="text-center" style="width: 15%;">Quantity</th>
+                    <th class="text-right" style="width: 20%;">Subtotal Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <div class="product-preview">
+                            <div class="product-img-placeholder">[Item 2]</div>
+                            <div class="product-info-title">Ergonomic Mechanical Keyboard</div>
+                        </div>
+                    </td>
+                    <td class="text-right">SGD 89.90</td>
+                    <td class="text-center">1</td>
+                    <td class="text-right" style="font-weight: 500;">SGD 89.90</td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="product-preview">
+                            <div class="product-img-placeholder">[Item 4]</div>
+                            <div class="product-info-title">Smart Fitness Tracker Watch</div>
+                        </div>
+                    </td>
+                    <td class="text-right">SGD 55.00</td>
+                    <td class="text-center">2</td>
+                    <td class="text-right" style="font-weight: 500;">SGD 110.00</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="remarks-row">
+            <label for="orderRemarks">Order Notes / Delivery Remarks:</label>
+            <input type="text" id="orderRemarks" placeholder="Optional: Leave a message or drop-off note for the courier handler...">
+        </div>
+    </div>
+
+    <div class="checkout-section">
+        <div class="payment-flex-container">
+            
+            <div class="stock-notice-bubble" id="dynamicNoticeBox">
+                <h3>Item 1: Premium Wireless Headphones</h3>
+                <p id="chosenOptionText">Under Option 1: Change to other brand</p>
+            </div>
+
+            <div class="payment-summary-box">
+                <div class="summary-line">
+                    <div class="label">Merchandise Subtotal:</div>
+                    <div class="val">SGD 199.90</div>
+                </div>
+                <div class="summary-line">
+                    <div class="label">Shipping Total Fee:</div>
+                    <div class="val">SGD 3.50</div>
+                </div>
+                <div class="summary-line">
+                    <div class="label">Voucher Discount Applied:</div>
+                    <div class="val" style="color: #26a541;">-SGD 10.00</div>
+                </div>
+                <div class="summary-line grand-total">
+                    <div class="label">Total Final Payment:</div>
+                    <div class="val">SGD 193.40</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="checkout-actions">
+        <a href="page1.html" class="btn-back">← Modify Items Basket</a>
+        <button class="btn-place-order" onclick="submitFinalOrder()">Submit Order Payment</button>
+    </div>
+</div>
+
+<script>
+    // Carry over logic execution engine
+    window.addEventListener('DOMContentLoaded', () => {
+        const savedOption = localStorage.getItem('selectedStockOption');
+        const noticeBox = document.getElementById('dynamicNoticeBox');
+        const optionText = document.getElementById('chosenOptionText');
+
+        if (savedOption) {
+            // Update structural text to match selection exactly
+            optionText.textContent = "Under " + savedOption;
+            noticeBox.style.display = "block";
+        } else {
+            // Hide bubble if no option selection exists
+            noticeBox.style.display = "none";
+        }
+    });
+
+    function submitFinalOrder() {
+        alert("🎉 Order successfully placed! Redirecting you to your Purchase History List.");
+        window.location.href = "page4.html";
+    }
+</script>
+
+</body>
+</html>
