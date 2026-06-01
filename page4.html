@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sam Seng Online Portal - Purchase History</title>
+    <style>
+        :root {
+            --primary-orange: #ff4d2e;
+            --primary-hover: #fb3411;
+            --secondary-blue: #0046b4;
+            --bg-light: #f5f5f5;
+            --border-color: #e5e5e5;
+            --text-dark: #212121;
+            --text-muted: #757575;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: var(--bg-light); color: var(--text-dark); padding: 15px; }
+        .shopee-container { max-width: 1200px; margin: 0 auto; }
+        
+        .shopee-header { background: linear-gradient(-180deg, var(--primary-orange), #ff6633); color: white; padding: 15px 20px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+        .shopee-header h1 { font-size: 22px; font-weight: 700; }
+        .header-meta { display: flex; gap: 25px; font-size: 14px; align-items: center; flex-wrap: wrap; }
+        .lang-switch-span a { color: white; text-decoration: none; font-weight: normal; cursor: pointer; }
+        .lang-switch-span a.active { font-weight: bold; text-decoration: underline; }
+
+        .history-title-bar { background: white; padding: 15px 20px; border-radius: 6px; margin: 20px 0 15px 0; font-size: 18px; font-weight: 600; border-left: 4px solid var(--primary-orange); }
+        
+        .dashboard-layout { display: grid; grid-template-columns: 45% 52%; gap: 3%; align-items: start; }
+        .panel-card { background: white; border-radius: 6px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.03); min-height: 350px; }
+        .panel-title { font-size: 15px; font-weight: 600; padding-bottom: 10px; border-bottom: 2px solid var(--border-color); margin-bottom: 15px; color: var(--text-dark); }
+        
+        .order-row-item { border: 1px solid var(--border-color); border-radius: 6px; padding: 12px 15px; margin-bottom: 10px; cursor: pointer; transition: all 0.2s; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+        .order-row-item:hover { border-color: var(--primary-orange); background-color: #fff5f3; }
+        .order-row-item.selected-active { border-color: var(--primary-orange); background-color: #fff5f3; box-shadow: 0 0 6px rgba(255, 77, 46, 0.15); }
+        .order-brief h5 { font-size: 14px; font-weight: 600; color: var(--text-dark); }
+        .order-brief p { font-size: 12px; color: var(--text-muted); margin-top: 3px; }
+        .order-brief .badge { display: inline-block; background: #fff3e0; color: #ff9800; font-size: 11px; padding: 2px 8px; border-radius: 3px; margin-top: 4px; font-weight: 500; }
+        
+        .order-cost-action { text-align: right; display: flex; flex-direction: column; gap: 6px; align-items: flex-end; }
+        .order-cost-action .amt { font-weight: 700; color: var(--primary-orange); font-size: 14px; }
+        .btn-action-repeat { background-color: var(--primary-orange); color: white; border: none; padding: 6px 12px; font-size: 11px; border-radius: 3px; cursor: pointer; text-decoration: none; font-weight: bold; min-height: 30px; display: inline-flex; align-items: center; }
+        .btn-action-repeat:hover { background-color: var(--primary-hover); }
+
+        .detail-meta-header { display: flex; justify-content: space-between; font-size: 13px; color: var(--text-muted); margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px dashed var(--border-color); flex-wrap: wrap; gap: 5px; }
+        
+        .table-responsive-wrapper { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        .detail-table { width: 100%; border-collapse: collapse; margin-top: 5px; min-width: 450px; }
+        .detail-table th { text-align: left; padding: 8px; font-size: 12px; color: var(--text-muted); border-bottom: 1px solid var(--border-color); }
+        .detail-table td { padding: 10px 8px; font-size: 13px; border-bottom: 1px solid #fdfdfd; }
+        .text-right { text-align: right; }
+        .text-center { text-align: center; }
+        
+        .detail-summary-block { margin-top: 15px; display: flex; flex-direction: column; align-items: flex-end; gap: 5px; font-size: 13px; border-top: 1px dashed var(--border-color); padding-top: 12px; }
+        .detail-total-line { font-size: 15px; font-weight: 600; margin-top: 4px; color: var(--text-dark); }
+        .detail-total-line .price { color: var(--primary-orange); font-size: 18px; font-weight: 700; }
+
+        .actions-row { margin-top: 25px; }
+        
+        .btn-home { background-color: #333; color: white; border: none; padding: 12px 30px; font-size: 14px; border-radius: 4px; text-decoration: none; font-weight: 500; display: inline-block; min-height: 44px; line-height: 20px; text-align: center; }
+        .btn-home:hover { background-color: #111; }
+        .no-selection-msg { text-align: center; color: var(--text-muted); font-size: 14px; padding-top: 80px; }
+
+        @media (max-width: 991px) {
+            .dashboard-layout { grid-template-columns: 1fr; gap: 20px; }
+            .panel-card { min-height: auto; }
+        }
+        @media (max-width: 576px) {
+            .shopee-header { flex-direction: column; text-align: center; }
+            .order-row-item { flex-direction: column; align-items: stretch; text-align: left; }
+            .order-cost-action { align-items: flex-start; text-align: left; margin-top: 10px; }
+            .btn-home { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="shopee-container">
+    <header class="shopee-header">
+        <h1 id="txt-h1">Sam Seng Online Portal</h1>
+        <div class="header-meta">
+            <div class="lang-switch-span">
+                <span id="txt-lang-lbl">Language</span>: 
+                <a id="m-lang-en" onclick="setLang('en')">EN</a> / 
+                <a id="m-lang-zh" onclick="setLang('zh')">CN</a>
+            </div>
+            <div><span id="txt-user-lbl">User</span>: <strong id="txt-username">Customer Name</strong></div>
+        </div>
+    </header>
+
+    <div class="history-title-bar" id="txt-bar-title">Grocery Account Ledger History</div>
+
+    <div class="dashboard-layout">
+        <div class="panel-card">
+            <div class="panel-title" id="txt-title-master">Past Invoices History List</div>
+            <div id="masterOrdersListContainer"></div>
+        </div>
+
+        <div class="panel-card" id="detailPanelCard">
+            <div class="panel-title" id="txt-title-detail">Invoice Breakdown Review</div>
+            <div id="detailBreakdownContainer">
+                <div class="no-selection-msg" id="txt-no-selection">Select a grocery receipt invoice row from the left panel to display breakdown itemization logs.</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="actions-row">
+        <a href="index.html" class="btn-home" id="txt-btn-home">Return to MainPage</a>
+    </div>
+</div>
+
+<script>
+    const orderHistoryDatabase = [
+        {
+            orderId: "SG-GRC-2026-9420",
+            displayId: "#1001",
+            date: "08-May-2026",
+            statusEn: "Delivered to Doorstep",
+            statusZh: "生鲜冷链送达骑手妥投",
+            items: { "item-2": 2, "item-3": 1 }
+        },
+        {
+            orderId: "SG-GRC-2026-9511",
+            displayId: "#1002",
+            date: "15-May-2026",
+            statusEn: "Delivered to Doorstep",
+            statusZh: "生鲜冷链送达骑手妥投",
+            items: { "item-4": 1, "item-6": 2, "item-7": 3 }
+        },
+        {
+            orderId: "SG-GRC-2026-LIVE",
+            displayId: "#1003 (Latest Checkout)",
+            date: "Today",
+            statusEn: "Fulfilling Cold-Chain Selection",
+            statusZh: "大厅配货保鲜装箱中",
+            items: null
+        }
+    ];
+
+    const itemNames = {
+        en: [
+            "Fresh Premium Whole Milk (1L)", "Farm Fresh Grade A Eggs (10s)", "Premium Jasmine Fragrant Rice (5kg)",
+            "Organic Extra Virgin Olive Oil (500ml)", "Fresh Atlantic Salmon Fillet (250g)", "Sweet Fuji Apples (5s Pack)",
+            "Locally Grown Fresh Spinach (200g)", "Premium Angus Ribeye Steak (300g)", "Multi-Purpose Disinfectant Wipes (80s)",
+            "Ultra Soft 3-Ply Bathroom Tissue (10s)"
+        ],
+        zh: [
+            "全脂鲜牛奶 (1升装)", "农场大号新鲜A级鸡蛋 (10粒装)", "优质泰国香米 (5公斤袋装)",
+            "有机特级初榨橄榄油 (500毫升)", "新鲜大西洋三文鱼柳 (250克)", "鲜甜高山富士苹果 (5个精装)",
+            "当地菜园直供新鲜嫩菠菜 (200克)", "特级安格斯肉眼牛排 (300克原切)", "居家多用途高效消毒湿巾 (80张)",
+            "超柔软三层立体印花卫生纸 (10卷装)"
+        ]
+    };
+
+    const itemPrices = [3.95, 3.20, 14.80, 12.50, 11.90, 4.50, 1.80, 24.90, 5.50, 7.95];
+
+    const dictionary = {
+        en: {
+            title: "Sam Seng Online Portal", langLbl: "Language", userLbl: "User", username: "Customer Name",
+            barTitle: "Grocery Account Ledger History", titleMaster: "Past Invoices History List",
+            titleDetail: "Invoice Breakdown Review", btnHome: "Return to MainPage",
+            noSelection: "Select a grocery receipt invoice row from the left panel to display breakdown itemization logs.",
+            lblOrder: "Invoice Registry ID", lblDate: "Purchased Date", thName: "Grocery Product Name", thPrice: "Price",
+            thQty: "Qty", thSub: "Subtotal", lblSubtotal: "Merchandise Subtotal", lblShipping: "Cold-Chain Shipping",
+            lblVoucher: "Voucher Discount Match", lblTotalPaid: "Total Settled Bill", btnRepeatAction: "Repeat This Grocery Order",
+            lblImg: "Item"
+        },
+        zh: {
+            title: "三盛网上超市", langLbl: "语言", userLbl: "用户", username: "贵宾顾客姓名",
+            barTitle: "超市历史零售交易结算单账台总账面", titleMaster: "历史购买订单账单列表",
+            titleDetail: "发票账单明细信息视窗", btnHome: "返回首页",
+            noSelection: "请在左侧列表点击任意一笔历史订单账单以加载并核查对应的具体明细项目。",
+            lblOrder: "收银发票号", lblDate: "收银打单时间", thName: "生鲜百货品名", thPrice: "单价",
+            thQty: "数量", thSub: "分类小计", lblSubtotal: "生鲜商品小计金额", lblShipping: "冷链包拆运输费",
+            lblVoucher: "代码特惠折抵金额", lblTotalPaid: "实付总款金额", btnRepeatAction: "复制复刻当前一整单",
+            lblImg: "货品"
+        }
+    };
+
+    let selectedOrderIndex = null;
+
+    function setLang(lang) {
+        localStorage.setItem('selectedLanguage', lang);
+        document.getElementById('m-lang-en').className = lang === 'en' ? 'active' : '';
+        document.getElementById('m-lang-zh').className = lang === 'zh' ? 'active' : '';
+
+        const d = dictionary[lang];
+        document.getElementById('txt-h1').textContent = d.title;
+        document.getElementById('txt-lang-lbl').textContent = d.langLbl;
+        document.getElementById('txt-user-lbl').textContent = d.userLbl;
+        document.getElementById('txt-username').textContent = d.username;
+        document.getElementById('txt-bar-title').textContent = d.barTitle;
+        document.getElementById('txt-title-master').textContent = d.titleMaster;
+        document.getElementById('txt-title-detail').textContent = d.titleDetail;
+        document.getElementById('txt-btn-home').textContent = d.btnHome;
+        
+        const noSelectEl = document.getElementById('txt-no-selection');
+        if (noSelectEl) noSelectEl.textContent = d.noSelection;
+
+        renderMasterList(lang);
+        if (selectedOrderIndex !== null) renderDetailBreakdown(selectedOrderIndex, lang);
+    }
+
+    function renderMasterList(lang) {
+        const container = document.getElementById('masterOrdersListContainer');
+        container.innerHTML = '';
+
+        orderHistoryDatabase.forEach((order, index) => {
+            let itemData = order.items;
+            if (index === 2) {
+                const liveCart = localStorage.getItem('samSengCart');
+                itemData = liveCart ? JSON.parse(liveCart) : {};
+            }
+
+            let subtotal = 0;
+            let totalQty = 0;
+            for (let i = 1; i <= 10; i++) {
+                const qty = itemData[`item-${i}`] || 0;
+                if (qty > 0) {
+                    subtotal += qty * itemPrices[i - 1];
+                    totalQty += qty;
+                }
+            }
+
+            if (totalQty === 0 && index === 2) return;
+
+            let finalPrice = subtotal + 3.50 - 10.00;
+            if (finalPrice < 0) finalPrice = 0;
+
+            const statusText = lang === 'en' ? order.statusEn : order.statusZh;
+            const activeClass = selectedOrderIndex === index ? 'selected-active' : '';
+
+            const rowDiv = document.createElement('div');
+            rowDiv.className = `order-row-item ${activeClass}`;
+            rowDiv.setAttribute('onclick', `selectOrder(${index})`);
+            rowDiv.innerHTML = `
+                <div class="order-brief">
+                    <h5>Grocery Invoice ${order.displayId}</h5>
+                    <p>${dictionary[lang].lblDate}: ${order.date}</p>
+                    <span class="badge">${statusText}</span>
+                </div>
+                <div class="order-cost-action">
+                    <span class="amt">SGD ${finalPrice.toFixed(2)}</span>
+                    <button class="btn-action-repeat" onclick="routeToRepeatPage(event, ${index})">${dictionary[lang].btnRepeatAction}</button>
+                </div>
+            `;
+            container.appendChild(rowDiv);
+        });
+    }
+
+    function selectOrder(index) {
+        selectedOrderIndex = index;
+        const lang = localStorage.getItem('selectedLanguage') || 'en';
+        document.querySelectorAll('.order-row-item').forEach((el, idx) => {
+            el.classList.toggle('selected-active', idx === index);
+        });
+        renderDetailBreakdown(index, lang);
+    }
+
+    function renderDetailBreakdown(index, lang) {
+        const container = document.getElementById('detailBreakdownContainer');
+        const order = orderHistoryDatabase[index];
+        
+        let itemData = order.items;
+        if (index === 2) itemData = JSON.parse(localStorage.getItem('samSengCart')) || {};
+
+        const d = dictionary[lang];
+        let subtotal = 0;
+        let tableRowsHtml = '';
+
+        for (let i = 1; i <= 10; i++) {
+            const qty = itemData[`item-${i}`] || 0;
+            if (qty > 0) {
+                const pName = itemNames[lang][i - 1];
+                const pPrice = itemPrices[i - 1];
+                const lineTotal = qty * pPrice;
+                subtotal += lineTotal;
+
+                tableRowsHtml += `
+                    <tr>
+                        <td><strong>[${d.lblImg} ${i}]</strong> ${pName}</td>
+                        <td class="text-right">SGD ${pPrice.toFixed(2)}</td>
+                        <td class="text-center">${qty}</td>
+                        <td class="text-right">SGD ${lineTotal.toFixed(2)}</td>
+                    </tr>
+                `;
+            }
+        }
+
+        let finalPayment = subtotal + 3.50 - 10.00;
+        if (finalPayment < 0) finalPayment = 0;
+
+        container.innerHTML = `
+            <div class="detail-meta-header">
+                <div>${d.lblOrder}: <strong>${order.orderId}</strong></div>
+                <div>${d.lblDate}: <strong>${order.date}</strong></div>
+            </div>
+            <div class="table-responsive-wrapper">
+                <table class="detail-table">
+                    <thead>
+                        <tr>
+                            <th>${d.thName}</th>
+                            <th class="text-right">${d.thPrice}</th>
+                            <th class="text-center">${d.thQty}</th>
+                            <th class="text-right">${d.thSub}</th>
+                        </tr>
+                    </thead>
+                    <tbody>${tableRowsHtml}</tbody>
+                </table>
+            </div>
+            <div class="detail-summary-block">
+                <div>${d.lblSubtotal}: SGD ${subtotal.toFixed(2)}</div>
+                <div>${d.lblShipping}: SGD 3.50</div>
+                <div>${d.lblVoucher}: -SGD 10.00</div>
+                <div class="detail-total-line">
+                    ${d.lblTotalPaid}: <span class="price">SGD ${finalPayment.toFixed(2)}</span>
+                </div>
+            </div>
+        `;
+    }
+
+    function routeToRepeatPage(event, index) {
+        event.stopPropagation();
+        const targetOrder = orderHistoryDatabase[index];
+        let itemData = targetOrder.items;
+        if (index === 2) itemData = JSON.parse(localStorage.getItem('samSengCart')) || {};
+        
+        localStorage.setItem('samSengTargetRepeatData', JSON.stringify(itemData));
+        localStorage.setItem('samSengTargetRepeatId', targetOrder.displayId);
+        localStorage.setItem('samSengTargetRepeatDate', targetOrder.date);
+        
+        window.location.href = "page3.html";
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+        setLang(localStorage.getItem('selectedLanguage') || 'en');
+    });
+</script>
+</body>
+</html>
