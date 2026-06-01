@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sam Seng Web Page - Purchase Confirmation</title>
+    <title>Sam Seng Online Portal - Checkout</title>
     <style>
         :root {
             --primary-orange: #ff4d2e;
@@ -13,302 +13,48 @@
             --border-color: #e5e5e5;
             --text-dark: #212121;
             --text-muted: #757575;
-            --card-shadow: 0 1px 3px rgba(0,0,0,0.03);
         }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: var(--bg-light); color: var(--text-dark); padding: 15px; }
+        .shopee-container { max-width: 1200px; margin: 0 auto; }
+        
+        .shopee-header { background: linear-gradient(-180deg, var(--primary-orange), #ff6633); color: white; padding: 15px 20px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+        .shopee-header h1 { font-size: 22px; font-weight: 700; }
+        .header-meta { display: flex; gap: 25px; font-size: 14px; align-items: center; flex-wrap: wrap; }
+        .lang-switch-span a { color: white; text-decoration: none; font-weight: normal; cursor: pointer; }
+        .lang-switch-span a.active { font-weight: bold; text-decoration: underline; }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        .checkout-title-bar { background: white; padding: 15px 20px; border-radius: 6px; margin: 20px 0 15px 0; font-size: 18px; font-weight: 600; border-left: 4px solid var(--primary-orange); }
+        
+        .checkout-card { background: white; border-radius: 6px; padding: 25px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.03); }
+        .notice-banner-box { background-color: #fff8e1; border: 1px solid #ffe082; border-radius: 4px; padding: 12px 20px; font-size: 14px; margin-bottom: 20px; color: #b78103; font-weight: 500; display: none; line-height: 1.4; }
 
-        body {
-            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            background-color: var(--bg-light);
-            color: var(--text-dark);
-            padding: 20px 20px 60px 20px;
-            line-height: 1.4;
-        }
+        .table-responsive-wrapper { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; margin-bottom: 15px; }
+        .checkout-table { width: 100%; border-collapse: collapse; min-width: 500px; }
+        .checkout-table th { text-align: left; padding: 12px 10px; font-size: 13px; color: var(--text-muted); border-bottom: 1px solid var(--border-color); font-weight: 500; }
+        .checkout-table td { padding: 15px 10px; font-size: 14px; border-bottom: 1px solid #fdfdfd; }
+        .text-right { text-align: right; }
+        .text-center { text-align: center; }
 
-        .shopee-container {
-            max-width: 1000px;
-            margin: 0 auto;
-        }
+        .img-thumb { width: 45px; height: 45px; border: 1px solid var(--border-color); border-radius: 4px; display: inline-flex; align-items: center; justify-content: center; background: #fafafa; font-size: 10px; color: #aaa; margin-right: 15px; font-weight: bold; }
+        .prod-cell { display: flex; align-items: center; }
 
-        /* Header Layout */
-        .shopee-header {
-            background: linear-gradient(-180deg, var(--primary-orange), #ff6633);
-            color: white;
-            padding: 15px 20px;
-            border-radius: 6px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            margin-bottom: 20px;
-        }
+        .bill-summary-block { margin-top: 20px; display: flex; flex-direction: column; align-items: flex-end; gap: 8px; font-size: 14px; border-top: 1px dashed var(--border-color); padding-top: 20px; }
+        .bill-total-line { font-size: 16px; font-weight: 600; margin-top: 5px; color: var(--text-dark); }
+        .bill-total-line .price { color: var(--primary-orange); font-size: 22px; font-weight: 700; }
 
-        .shopee-header h1 {
-            font-size: 22px;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-        }
+        .actions-row { display: flex; justify-content: space-between; align-items: center; margin-top: 25px; flex-wrap: wrap; gap: 15px; }
+        .btn-back { background-color: transparent; color: #555; border: 1px solid #bcbcbc; padding: 12px 30px; font-size: 14px; border-radius: 4px; text-decoration: none; font-weight: 500; text-align: center; display: inline-block; min-height: 44px; line-height: 20px; }
+        .btn-back:hover { background: #eee; }
+        .btn-pay { background: linear-gradient(90deg, #ff6633, var(--primary-orange)); color: white; border: none; padding: 15px 50px; font-size: 16px; font-weight: 600; border-radius: 4px; cursor: pointer; box-shadow: 0 4px 12px rgba(255, 77, 46, 0.2); min-height: 44px; }
+        .btn-pay:hover { background: var(--primary-hover); }
 
-        .header-meta {
-            display: flex;
-            gap: 25px;
-            font-size: 14px;
-        }
-
-        /* Checkout Progress Title Bar */
-        .checkout-title-bar {
-            background: white;
-            padding: 15px 20px;
-            border-radius: 6px;
-            margin-bottom: 15px;
-            box-shadow: var(--card-shadow);
-            font-size: 18px;
-            font-weight: 600;
-            color: #222;
-            border-left: 4px solid var(--primary-orange);
-        }
-
-        /* Panel Block Layouts */
-        .checkout-section {
-            background: white;
-            border-radius: 6px;
-            padding: 20px;
-            margin-bottom: 15px;
-            box-shadow: var(--card-shadow);
-        }
-
-        .section-title {
-            font-size: 15px;
-            font-weight: 600;
-            text-transform: uppercase;
-            color: var(--text-muted);
-            margin-bottom: 15px;
-            letter-spacing: 0.5px;
-        }
-
-        /* Delivery Address Styling */
-        .address-box {
-            display: flex;
-            gap: 15px;
-            font-size: 14px;
-        }
-
-        .address-box .user-info {
-            font-weight: 700;
-            min-width: 150px;
-        }
-
-        .address-box .address-text {
-            color: #333;
-        }
-
-        /* Table Review Basket Items */
-        .basket-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .basket-table th {
-            text-align: left;
-            padding: 12px 10px;
-            font-size: 14px;
-            color: var(--text-muted);
-            font-weight: 500;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .basket-table td {
-            padding: 15px 10px;
-            font-size: 14px;
-            vertical-align: middle;
-            border-bottom: 1px solid #fcfcfc;
-        }
-
-        .product-preview {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .product-img-placeholder {
-            width: 50px;
-            height: 50px;
-            background-color: #fafafa;
-            border: 1px solid var(--border-color);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 10px;
-            color: #bbb;
-            font-weight: bold;
-            border-radius: 4px;
-        }
-
-        .product-info-title {
-            font-weight: 500;
-            color: var(--text-dark);
-        }
-
-        .text-right {
-            text-align: right;
-        }
-
-        .text-center {
-            text-align: center;
-        }
-
-        /* Remarks Input Layout */
-        .remarks-row {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            background: #fafafa;
-            padding: 12px 15px;
-            border-top: 1px dashed var(--border-color);
-            margin-top: 10px;
-        }
-
-        .remarks-row label {
-            font-size: 14px;
-            color: #444;
-            white-space: nowrap;
-        }
-
-        .remarks-row input {
-            flex-grow: 1;
-            padding: 8px 12px;
-            border: 1px solid var(--border-color);
-            border-radius: 4px;
-            font-size: 13px;
-        }
-
-        .remarks-row input:focus {
-            outline: none;
-            border-color: var(--primary-orange);
-        }
-
-        /* --- STYLED CONTAINER FROM PREVIOUS GOOD VERSION --- */
-        .payment-flex-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 20px;
-        }
-
-        /* Stock Notice Bubble layout matching your drawing */
-        .stock-notice-bubble {
-            border: 2.5px solid #212121;
-            border-radius: 16px;
-            padding: 18px 25px;
-            width: 450px;
-            background-color: #ffffff;
-            display: none; /* Controlled dynamically by JavaScript below */
-        }
-
-        .stock-notice-bubble h3 {
-            font-size: 18px;
-            font-weight: 700;
-            color: #000000;
-            margin-bottom: 6px;
-        }
-
-        .stock-notice-bubble p {
-            font-size: 16px;
-            font-weight: 700;
-            color: #000000;
-        }
-
-        /* Payment Summary Blocks */
-        .payment-summary-box {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            gap: 12px;
-            flex-grow: 1;
-        }
-
-        .summary-line {
-            display: flex;
-            justify-content: flex-end;
-            width: 350px;
-            font-size: 14px;
-            color: var(--text-muted);
-        }
-
-        .summary-line .label {
-            width: 200px;
-            text-align: right;
-            padding-right: 20px;
-        }
-
-        .summary-line .val {
-            width: 150px;
-            text-align: right;
-            color: var(--text-dark);
-        }
-
-        .summary-line.grand-total {
-            margin-top: 5px;
-            align-items: center;
-        }
-
-        .summary-line.grand-total .label {
-            font-size: 16px;
-            color: var(--text-dark);
-            font-weight: 500;
-        }
-
-        .summary-line.grand-total .val {
-            font-size: 26px;
-            font-weight: 700;
-            color: var(--primary-orange);
-        }
-
-        /* Interaction Buttons Footer Layout */
-        .checkout-actions {
-            margin-top: 25px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .btn-back {
-            background-color: transparent;
-            color: #555;
-            border: 1px solid #bcbcbc;
-            padding: 12px 25px;
-            font-size: 14px;
-            font-weight: 500;
-            border-radius: 4px;
-            cursor: pointer;
-            text-decoration: none;
-            transition: all 0.2s;
-        }
-
-        .btn-back:hover {
-            background-color: #eee;
-            color: #222;
-        }
-
-        .btn-place-order {
-            background: #ff4d2e;
-            color: white;
-            border: none;
-            padding: 14px 50px;
-            font-size: 16px;
-            font-weight: 600;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        .btn-place-order:hover {
-            background: var(--primary-hover);
+        @media (max-width: 576px) {
+            .shopee-header { flex-direction: column; text-align: center; }
+            .checkout-card { padding: 15px; }
+            .bill-summary-block { align-items: stretch; }
+            .actions-row { flex-direction: column; align-items: stretch; }
+            .btn-back, .btn-pay { width: 100%; text-align: center; }
         }
     </style>
 </head>
@@ -316,127 +62,187 @@
 
 <div class="shopee-container">
     <header class="shopee-header">
-        <h1>Sam Seng Web Page</h1>
+        <h1 id="txt-h1">Sam Seng Online Portal</h1>
         <div class="header-meta">
-            <div>Language: <strong>EN / CN</strong></div>
-            <div>User: <strong>Login User Name</strong></div>
+            <div class="lang-switch-span">
+                <span id="txt-lang-lbl">Language</span>: 
+                <a id="m-lang-en" onclick="setLang('en')">EN</a> / 
+                <a id="m-lang-zh" onclick="setLang('zh')">CN</a>
+            </div>
+            <div><span id="txt-user-lbl">User</span>: <strong id="txt-username">Customer Name</strong></div>
         </div>
     </header>
 
-    <div class="checkout-title-bar">
-        Purchase Confirmation / Checkout Preview
-    </div>
+    <div class="checkout-title-bar" id="txt-bar-title">Review Grocery Order Basket</div>
 
-    <div class="checkout-section">
-        <div class="section-title">Delivery Address</div>
-        <div class="address-box">
-            <div class="user-info">Login User Name (+65 9123 4567)</div>
-            <div class="address-text">8 Temasek Boulevard, Suntec Tower Three, #42-01, Singapore 038988</div>
+    <div class="checkout-card">
+        <div class="notice-banner-box" id="stockRouteNoticeBanner"></div>
+
+        <div class="table-responsive-wrapper">
+            <table class="checkout-table">
+                <thead>
+                    <tr>
+                        <th id="th-name">Grocery Item Details</th>
+                        <th class="text-right" id="th-price">Unit Price</th>
+                        <th class="text-center" id="th-qty">Quantity</th>
+                        <th class="text-right" id="th-subtotal">Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody id="checkoutTableBody">
+                    <!-- Generated Dynamically -->
+                </tbody>
+            </table>
         </div>
-    </div>
 
-    <div class="checkout-section">
-        <div class="section-title">Products Ordered</div>
-        
-        <table class="basket-table">
-            <thead>
-                <tr>
-                    <th style="width: 50%;">Product Name</th>
-                    <th class="text-right" style="width: 15%;">Unit Price</th>
-                    <th class="text-center" style="width: 15%;">Quantity</th>
-                    <th class="text-right" style="width: 20%;">Subtotal Price</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>
-                        <div class="product-preview">
-                            <div class="product-img-placeholder">[Item 2]</div>
-                            <div class="product-info-title">Ergonomic Mechanical Keyboard</div>
-                        </div>
-                    </td>
-                    <td class="text-right">SGD 89.90</td>
-                    <td class="text-center">1</td>
-                    <td class="text-right" style="font-weight: 500;">SGD 89.90</td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="product-preview">
-                            <div class="product-img-placeholder">[Item 4]</div>
-                            <div class="product-info-title">Smart Fitness Tracker Watch</div>
-                        </div>
-                    </td>
-                    <td class="text-right">SGD 55.00</td>
-                    <td class="text-center">2</td>
-                    <td class="text-right" style="font-weight: 500;">SGD 110.00</td>
-                </tr>
-            </tbody>
-        </table>
-
-        <div class="remarks-row">
-            <label for="orderRemarks">Order Notes / Delivery Remarks:</label>
-            <input type="text" id="orderRemarks" placeholder="Optional: Leave a message or drop-off note for the courier handler...">
-        </div>
-    </div>
-
-    <div class="checkout-section">
-        <div class="payment-flex-container">
-            
-            <div class="stock-notice-bubble" id="dynamicNoticeBox">
-                <h3>Item 1: Premium Wireless Headphones</h3>
-                <p id="chosenOptionText">Under Option 1: Change to other brand</p>
+        <div class="bill-summary-block">
+            <div><span id="txt-lbl-subtotal">Basket Subtotal</span>: SGD <span id="valSubtotal">0.00</span></div>
+            <div><span id="txt-lbl-shipping">Cold-Chain Delivery</span>: SGD <span id="valShipping">3.50</span></div>
+            <div><span id="txt-lbl-discount">Voucher Discount</span>: -SGD <span id="valDiscount">10.00</span></div>
+            <div class="bill-total-line">
+                <span id="txt-lbl-final">Total Bill Payment</span>: <span class="price">SGD <span id="valFinalTotal">0.00</span></span>
             </div>
-
-            <div class="payment-summary-box">
-                <div class="summary-line">
-                    <div class="label">Merchandise Subtotal:</div>
-                    <div class="val">SGD 199.90</div>
-                </div>
-                <div class="summary-line">
-                    <div class="label">Shipping Total Fee:</div>
-                    <div class="val">SGD 3.50</div>
-                </div>
-                <div class="summary-line">
-                    <div class="label">Voucher Discount Applied:</div>
-                    <div class="val" style="color: #26a541;">-SGD 10.00</div>
-                </div>
-                <div class="summary-line grand-total">
-                    <div class="label">Total Final Payment:</div>
-                    <div class="val">SGD 193.40</div>
-                </div>
-            </div>
-
         </div>
     </div>
 
-    <div class="checkout-actions">
-        <a href="page1.html" class="btn-back">← Modify Items Basket</a>
-        <button class="btn-place-order" onclick="submitFinalOrder()">Submit Order Payment</button>
+    <div class="actions-row">
+        <a href="page1.html" class="btn-back" id="txt-btn-back">Modify Basket</a>
+        <button class="btn-pay" id="txt-btn-pay" onclick="triggerFinalPayment()">Place Order & Pay</button>
     </div>
 </div>
 
 <script>
-    // Carry over logic execution engine
-    window.addEventListener('DOMContentLoaded', () => {
-        const savedOption = localStorage.getItem('selectedStockOption');
-        const noticeBox = document.getElementById('dynamicNoticeBox');
-        const optionText = document.getElementById('chosenOptionText');
+    let cart = {};
+    const itemNames = {
+        en: [
+            "Fresh Premium Whole Milk (1L)", "Farm Fresh Grade A Eggs (10s)", "Premium Jasmine Fragrant Rice (5kg)",
+            "Organic Extra Virgin Olive Oil (500ml)", "Fresh Atlantic Salmon Fillet (250g)", "Sweet Fuji Apples (5s Pack)",
+            "Locally Grown Fresh Spinach (200g)", "Premium Angus Ribeye Steak (300g)", "Multi-Purpose Disinfectant Wipes (80s)",
+            "Ultra Soft 3-Ply Bathroom Tissue (10s)"
+        ],
+        zh: [
+            "全脂鲜牛奶 (1升装)", "农场大号新鲜A级鸡蛋 (10粒装)", "优质泰国香米 (5公斤袋装)",
+            "有机特级初榨橄榄油 (500毫升)", "新鲜大西洋三文鱼柳 (250克)", "鲜甜高山富士苹果 (5个精装)",
+            "当地菜园直供新鲜嫩菠菜 (200克)", "特级安格斯肉眼牛排 (300克原切)", "居家多用途高效消毒湿巾 (80张)",
+            "超柔软三层立体印花卫生纸 (10卷装)"
+        ]
+    };
 
-        if (savedOption) {
-            // Update structural text to match selection exactly
-            optionText.textContent = "Under " + savedOption;
-            noticeBox.style.display = "block";
-        } else {
-            // Hide bubble if no option selection exists
-            noticeBox.style.display = "none";
+    const itemPrices = [3.95, 3.20, 14.80, 12.50, 11.90, 4.50, 1.80, 24.90, 5.50, 7.95];
+
+    const dictionary = {
+        en: {
+            title: "Sam Seng Online Portal", langLbl: "Language", userLbl: "User", username: "Customer Name",
+            barTitle: "Review Grocery Order Basket", thName: "Grocery Item Details", thPrice: "Unit Price",
+            thQty: "Quantity", thSubtotal: "Subtotal", lblSubtotal: "Basket Subtotal",
+            lblShipping: "Cold-Chain Delivery", lblDiscount: "Voucher Discount", lblFinal: "Total Bill Payment",
+            btnBack: "Modify Basket", btnPay: "Place Order & Pay", imgText: "Grocery",
+            bannerPre: "⚠️ Stock Substitute Route Selected for Item 1: ",
+            emptyMsg: "Your grocery basket is empty. Please return to storefront to pick items.",
+            successAlert: "Payment processed successfully! Your fresh groceries are being packed."
+        },
+        zh: {
+            title: "三盛网上超市", langLbl: "语言", userLbl: "用户", username: "贵宾顾客姓名",
+            barTitle: "核对您的超市订单购货篮", thName: "商品明细项名称", thPrice: "超市定价",
+            thQty: "结算数量", thSubtotal: "项目汇总小计", lblSubtotal: "生鲜货品总额",
+            lblShipping: "冷链配送服务费", lblDiscount: "专享代金券扣减", lblFinal: "实际应付总结算款",
+            btnBack: "返回修改购物车", btnPay: "提交订单并在线支付", imgText: "百货",
+            bannerPre: "⚠️ 已针对缺货的 “全脂鲜牛奶 (1升装)” 批复了供应链替换路径: ",
+            emptyMsg: "您的购物车空空如也，请返回主页选购商品。",
+            successAlert: "收银台在线扣款成功！您的生鲜货品正在保鲜装箱中。"
         }
-    });
+    };
 
-    function submitFinalOrder() {
-        alert("🎉 Order successfully placed! Redirecting you to your Purchase History List.");
+    function setLang(lang) {
+        localStorage.setItem('selectedLanguage', lang);
+        document.getElementById('m-lang-en').className = lang === 'en' ? 'active' : '';
+        document.getElementById('m-lang-zh').className = lang === 'zh' ? 'active' : '';
+
+        const d = dictionary[lang];
+        document.getElementById('txt-h1').textContent = d.title;
+        document.getElementById('txt-lang-lbl').textContent = d.langLbl;
+        document.getElementById('txt-user-lbl').textContent = d.userLbl;
+        document.getElementById('txt-username').textContent = d.username;
+        document.getElementById('txt-bar-title').textContent = d.barTitle;
+        document.getElementById('th-name').textContent = d.thName;
+        document.getElementById('th-price').textContent = d.thPrice;
+        document.getElementById('th-qty').textContent = d.thQty;
+        document.getElementById('th-subtotal').textContent = d.thSubtotal;
+        document.getElementById('txt-lbl-subtotal').textContent = d.lblSubtotal;
+        document.getElementById('txt-lbl-shipping').textContent = d.lblShipping;
+        document.getElementById('txt-lbl-discount').textContent = d.lblDiscount;
+        document.getElementById('txt-lbl-final').textContent = d.lblFinal;
+        document.getElementById('txt-btn-back').textContent = d.btnBack;
+        document.getElementById('txt-btn-pay').textContent = d.btnPay;
+
+        renderCheckoutList(lang);
+    }
+
+    function renderCheckoutList(lang) {
+        const tbody = document.getElementById('checkoutTableBody');
+        tbody.innerHTML = '';
+        let subtotal = 0;
+        let activeItemsCount = 0;
+
+        for (let i = 1; i <= 10; i++) {
+            const qty = cart[`item-${i}`] || 0;
+            if (qty > 0) {
+                activeItemsCount++;
+                const name = itemNames[lang][i-1];
+                const price = itemPrices[i-1];
+                const itemSubtotal = qty * price;
+                subtotal += itemSubtotal;
+
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>
+                        <div class="prod-cell">
+                            <div class="img-thumb">[${dictionary[lang].imgText} ${i}]</div>
+                            <span><strong>${name}</strong></span>
+                        </div>
+                    </td>
+                    <td class="text-right">SGD ${price.toFixed(2)}</td>
+                    <td class="text-center">${qty}</td>
+                    <td class="text-right">SGD ${itemSubtotal.toFixed(2)}</td>
+                `;
+                tbody.appendChild(row);
+            }
+        }
+
+        if (activeItemsCount === 0) {
+            tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding: 40px; color: #999;">${dictionary[lang].emptyMsg}</td></tr>`;
+        }
+
+        const shippingFee = activeItemsCount > 0 ? 3.50 : 0.00;
+        const discountAmt = activeItemsCount > 0 ? 10.00 : 0.00;
+        let finalTotal = subtotal + shippingFee - discountAmt;
+        if (finalTotal < 0) finalTotal = 0;
+
+        document.getElementById('valSubtotal').textContent = subtotal.toFixed(2);
+        document.getElementById('valShipping').textContent = shippingFee.toFixed(2);
+        document.getElementById('valDiscount').textContent = discountAmt.toFixed(2);
+        document.getElementById('valFinalTotal').textContent = finalTotal.toFixed(2);
+
+        const routeNotice = localStorage.getItem('selectedStockOption');
+        const banner = document.getElementById('stockRouteNoticeBanner');
+        if (cart['item-1'] > 0 && routeNotice) {
+            banner.textContent = dictionary[lang].bannerPre + routeNotice;
+            banner.style.display = 'block';
+        } else {
+            banner.style.display = 'none';
+        }
+    }
+
+    function triggerFinalPayment() {
+        const lang = localStorage.getItem('selectedLanguage') || 'en';
+        alert(dictionary[lang].successAlert);
         window.location.href = "page4.html";
     }
-</script>
 
+    window.addEventListener('DOMContentLoaded', () => {
+        const savedCart = localStorage.getItem('samSengCart');
+        if (savedCart) cart = JSON.parse(savedCart);
+        setLang(localStorage.getItem('selectedLanguage') || 'en');
+    });
+</script>
 </body>
 </html>
