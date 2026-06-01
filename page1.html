@@ -15,41 +15,70 @@
             --text-muted: #757575;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: var(--bg-light); color: var(--text-dark); padding: 15px 15px 120px 15px; }
+        body { 
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; 
+            background-color: var(--bg-light); 
+            color: var(--text-dark); 
+            padding: 20px; 
+            min-height: 100vh;
+        }
         .shopee-container { max-width: 1200px; margin: 0 auto; }
         
+        /* Header Match for image_f15727.png */
         .shopee-header { 
             background: linear-gradient(-180deg, var(--primary-orange), #ff6633); 
             color: white; 
             padding: 15px 20px; 
             border-radius: 6px; 
             display: flex; 
-            flex-wrap: wrap; 
-            gap: 15px; 
             justify-content: space-between; 
             align-items: center; 
+            flex-wrap: wrap;
+            gap: 15px;
         }
         .shopee-header h1 { font-size: 22px; font-weight: 700; }
-        .header-meta { display: flex; flex-wrap: wrap; gap: 15px; font-size: 14px; align-items: center; }
-        
-        .lang-switch-span a { color: white; text-decoration: none; font-weight: normal; cursor: pointer; }
-        .lang-switch-span a.active { font-weight: bold; text-decoration: underline; }
+        .header-meta { display: flex; gap: 15px; font-size: 14px; align-items: center; flex-wrap: wrap; }
 
-        .btn-history-nav { background-color: rgba(255, 255, 255, 0.2); color: white; border: 1px solid rgba(255, 255, 255, 0.6); padding: 6px 14px; border-radius: 4px; font-size: 13px; font-weight: 600; text-decoration: none; cursor: pointer; transition: all 0.2s; }
+        /* Navigation & Reset Buttons Matching styling */
+        .btn-reset-history { 
+            background-color: #343a40; 
+            color: white; 
+            border: none; 
+            padding: 8px 16px; 
+            font-size: 13px; 
+            font-weight: 600; 
+            border-radius: 4px; 
+            cursor: pointer; 
+            transition: background 0.2s;
+        }
+        .btn-reset-history:hover { background-color: #212529; }
+
+        .btn-history-nav { 
+            background-color: rgba(255, 255, 255, 0.2); 
+            color: white; 
+            border: 1px solid rgba(255, 255, 255, 0.6); 
+            padding: 8px 16px; 
+            border-radius: 4px; 
+            font-size: 13px; 
+            font-weight: 600; 
+            text-decoration: none; 
+            cursor: pointer; 
+            transition: all 0.2s; 
+        }
         .btn-history-nav:hover { background-color: white; color: var(--primary-orange); }
 
-        .btn-reset-history { background-color: #444; color: white; border: none; padding: 6px 12px; font-size: 12px; font-weight: 600; border-radius: 4px; cursor: pointer; }
-        .btn-reset-history:hover { background-color: #222; }
-
-        .store-title-bar { background: white; padding: 15px 20px; border-radius: 6px; margin: 20px 0 15px 0; font-size: 18px; font-weight: 600; border-left: 4px solid var(--primary-orange); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+        .store-layout { display: grid; grid-template-columns: 68% 30%; gap: 2%; margin-top: 20px; align-items: start; }
         
+        .shelf-card { background: white; border-radius: 6px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.03); }
+        .shelf-control-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px; border-bottom: 1px solid var(--border-color); margin-bottom: 15px; flex-wrap: wrap; gap: 10px; }
+        .shelf-title { font-size: 16px; font-weight: 600; }
+        
+        /* Layout Toggle Buttons Styles */
         .view-toggle-buttons { display: inline-flex; border: 1px solid var(--border-color); border-radius: 4px; overflow: hidden; background: #eee; }
-        .view-toggle-buttons button { background: #fdfdfd; border: none; padding: 8px 14px; font-size: 12px; cursor: pointer; font-weight: 500; color: #555; }
+        .view-toggle-buttons button { background: #fdfdfd; border: none; padding: 6px 12px; font-size: 12px; cursor: pointer; font-weight: 500; color: #555; }
         .view-toggle-buttons button.active { background: var(--primary-orange); color: white; font-weight: 600; }
 
-        .store-layout { display: grid; grid-template-columns: 68% 30%; gap: 2%; align-items: start; }
-        .shelf-card { background: white; border-radius: 6px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.03); }
-        
+        /* Dynamic View Modes Layout Rules */
         .product-grid { display: grid; gap: 15px; }
         .product-grid.view-large { grid-template-columns: repeat(2, 1fr); }
         .product-grid.view-detail { grid-template-columns: 1fr; }
@@ -57,44 +86,86 @@
         .product-item { border: 1px solid var(--border-color); border-radius: 6px; padding: 15px; background: #fff; transition: border-color 0.15s; }
         .product-item:hover { border-color: var(--primary-orange); }
         
+        /* View structural variations */
         .view-large .product-item { display: flex; flex-direction: column; justify-content: space-between; min-height: 220px; }
-        .view-detail .product-item { display: flex; flex-direction: row; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 15px; padding: 15px; }
+        .view-detail .product-item { display: flex; flex-direction: row; justify-content: space-between; align-items: center; gap: 20px; padding: 12px 20px; }
 
         .prod-info { flex: 1; }
-        .view-detail .prod-info { display: flex; flex-wrap: wrap; align-items: center; gap: 15px; justify-content: space-between; width: 70%; }
+        .view-detail .prod-info { display: flex; align-items: center; gap: 15px; justify-content: space-between; width: 75%; }
         
         .prod-title-box { font-size: 14px; font-weight: 600; color: var(--text-dark); margin-bottom: 5px; }
         .view-large .prod-title-box { height: 38px; overflow: hidden; }
-        .view-detail .prod-title-box { margin-bottom: 0; width: 40%; min-width: 150px; }
+        .view-detail .prod-title-box { margin-bottom: 0; width: 45%; }
 
         .prod-price-box { font-size: 15px; font-weight: 700; color: var(--primary-orange); margin-bottom: 8px; }
         .view-detail .prod-price-box { margin-bottom: 0; width: 20%; text-align: right; }
 
         .stock-status-line { font-size: 12px; margin-bottom: 12px; font-weight: 500; }
-        .view-detail .stock-status-line { margin-bottom: 0; width: 30%; text-align: right; }
+        .view-detail .stock-status-line { margin-bottom: 0; width: 35%; text-align: right; }
         .status-instock { color: #2ecc71; }
         .status-out { color: #e74c3c; }
 
         .action-container { width: 100%; }
-        .view-detail .action-container { width: auto; text-align: right; }
+        .view-detail .action-container { width: 22%; text-align: right; }
 
-        .btn-add-cart { background-color: var(--primary-orange); color: white; border: none; width: 100%; padding: 12px; font-size: 13px; font-weight: 600; border-radius: 4px; cursor: pointer; min-height: 44px; }
+        .btn-add-cart { background-color: var(--primary-orange); color: white; border: none; width: 100%; padding: 10px; font-size: 13px; font-weight: 600; border-radius: 4px; cursor: pointer; }
         .btn-add-cart:hover { background-color: var(--primary-hover); }
 
-        .exception-box { background-color: #fff3e0; border: 1px solid #ffe0b2; border-radius: 4px; padding: 8px; margin: 8px 0; font-size: 12px; width: 100%; }
-        .exception-box select { width: 100%; padding: 8px; margin-top: 4px; border-radius: 4px; border: 1px solid #ccc; font-size: 12px; }
+        .exception-box { background-color: #fff3e0; border: 1px solid #ffe0b2; border-radius: 4px; padding: 8px; margin: 8px 0; font-size: 12px; }
+        .exception-box select { width: 100%; padding: 5px; margin-top: 4px; border-radius: 4px; border: 1px solid #ccc; font-size: 12px; }
 
+        /* Cart panel configuration */
         .cart-card { background: white; border-radius: 6px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.03); position: sticky; top: 20px; }
         .cart-item-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px dashed #f5f5f5; font-size: 13px; gap: 10px; }
+        
+        /* Direct edit inputs configuration */
         .cart-qty-control { display: flex; align-items: center; gap: 8px; }
         .cart-qty-control button { width: 28px; height: 28px; background: #eee; border: 1px solid #ccc; border-radius: 3px; cursor: pointer; font-weight: bold; font-size: 14px; display: inline-flex; align-items: center; justify-content: center; }
+        .cart-qty-control input { 
+            width: 44px; 
+            height: 28px; 
+            text-align: center; 
+            border: 1px solid #ccc; 
+            border-radius: 3px; 
+            font-size: 13px; 
+            font-weight: 600; 
+            -moz-appearance: textfield; 
+        }
+        .cart-qty-control input::-webkit-outer-spin-button,
+        .cart-qty-control input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
         
-        .cart-summary { border-top: 1px solid var(--border-color); margin-top: 15px; padding-top: 15px; font-size: 14px; display: flex; flex-direction: column; gap: 6px; }
-        .cart-total-line { font-weight: 700; font-size: 16px; margin-top: 5px; display: flex; justify-content: space-between; }
+        .cart-summary { border-top: 1px solid var(--border-color); margin-top: 15px; padding-top: 15px; font-size: 14px; display: flex; flex-direction: column; gap: 8px; }
+        .cart-total-line { font-weight: 700; font-size: 16px; margin-top: 5px; display: flex; justify-content: space-between; border-top: 1px dashed #eee; padding-top: 8px; }
         .cart-total-line span.price { color: var(--primary-orange); }
 
-        .btn-checkout { background: linear-gradient(90deg, #ff6633, var(--primary-orange)); color: white; border: none; width: 100%; padding: 12px; font-size: 15px; font-weight: 600; border-radius: 4px; cursor: pointer; margin-top: 15px; display: block; text-align: center; text-decoration: none; box-shadow: 0 4px 10px rgba(255, 77, 46, 0.2); min-height: 44px; }
+        .btn-checkout { background: linear-gradient(90deg, #ff6633, var(--primary-orange)); color: white; border: none; width: 100%; padding: 12px; font-size: 15px; font-weight: 600; border-radius: 4px; cursor: pointer; margin-top: 15px; display: block; text-align: center; text-decoration: none; box-shadow: 0 4px 10px rgba(255, 77, 46, 0.2); }
 
+        /* Custom notifications configuration */
+        .custom-toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background-color: #333;
+            color: #fff;
+            padding: 12px 24px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            font-size: 14px;
+            font-weight: 500;
+            opacity: 0;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            z-index: 9999;
+        }
+        .custom-toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* Screen adaptation settings */
         @media (max-width: 991px) {
             .store-layout { grid-template-columns: 1fr; gap: 20px; }
             .cart-card { position: static; margin-top: 15px; }
@@ -116,7 +187,10 @@
     <header class="shopee-header">
         <h1 id="txt-h1">Sam Seng Online Portal</h1>
         <div class="header-meta">
+            <!-- Clear History Action -->
             <button class="btn-reset-history" id="txt-btn-reset" onclick="clearSystemHistory()">Clear History</button>
+            
+            <!-- Check purchase history Action -->
             <a href="page4.html" class="btn-history-nav" id="txt-btn-history">Purchase History</a>
             
             <div class="lang-switch-span">
@@ -129,8 +203,9 @@
     </header>
 
     <div class="store-layout">
+        <!-- Dual Display Layout shelf -->
         <div class="shelf-card">
-            <div class="shelf-control-header" style="display:flex; justify-content:space-between; align-items:center; padding-bottom:10px; margin-bottom:15px; border-bottom:1px solid var(--border-color); flex-wrap:wrap; gap:10px;">
+            <div class="shelf-control-header">
                 <div class="shelf-title" id="txt-shelf-title">Fresh Daily Groceries Storefront</div>
                 
                 <div class="view-toggle-buttons">
@@ -142,12 +217,21 @@
             <div class="product-grid view-large" id="productGridContainer"></div>
         </div>
 
+        <!-- Sidebar Active Basket Container with Multi-Metric Totals -->
         <div class="cart-card">
             <div style="font-size: 16px; font-weight: 600; padding-bottom: 10px; border-bottom: 1px solid var(--border-color); margin-bottom: 15px;" id="txt-cart-title">My Grocery Basket</div>
             <div id="cartItemsContainer"></div>
             
             <div class="cart-summary">
-                <div>Subtotal: SGD <span id="valCartSubtotal">0.00</span></div>
+                <!-- Total Quantity Line Added -->
+                <div style="display: flex; justify-content: space-between;">
+                    <span id="txt-lbl-total-qty">Total Quantity</span>: 
+                    <strong><span id="valCartTotalQty">0</span></strong>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                    <span id="txt-lbl-subtotal">Subtotal</span>: 
+                    <span>SGD <span id="valCartSubtotal">0.00</span></span>
+                </div>
                 <div class="cart-total-line">
                     <span id="txt-lbl-est">Est. Total</span>: 
                     <span class="price">SGD <span id="valCartTotal">0.00</span></span>
@@ -198,7 +282,8 @@
             inStock: "In Stock", outStock: "Out of Stock", selectRoute: "Select Substitution Mode:", 
             emptyCart: "Your basket is empty.", largeView: "Large View", detailView: "Detail View",
             routes: ["Cancel Line Item", "Substitute with Brand B Milk (+SGD 0.50)", "Contact Customer Service Line"],
-            btnReset: "Clear History & Reset", resetAlert: "All storefront data and cart logs have been cleared successfully!"
+            btnReset: "Clear History", resetAlert: "All active carts and purchase history logs have been cleared successfully!",
+            totalQtyLbl: "Total Quantity", subtotalLbl: "Subtotal"
         },
         zh: {
             title: "三盛网上超市", langLbl: "语言", userLbl: "用户", username: "贵宾顾客姓名",
@@ -207,9 +292,23 @@
             inStock: "库存充足", outStock: "缺货中", selectRoute: "请指定配货处理方案:", 
             emptyCart: "购物车目前空空如也。", largeView: "大图视图", detailView: "详细列表",
             routes: ["直接取消该商品缺货项", "替换为品牌B高品质鲜奶 (+SGD 0.50)", "保留订单并转交客服专线沟通"],
-            btnReset: "清除历史并重置", resetAlert: "所有超市购物车状态参数与历史采购流水台账已全部重置归零！"
+            btnReset: "清除历史并重置", resetAlert: "所有超市购物车状态参数与历史采购流水台账已全部重置归零！",
+            totalQtyLbl: "商品总数量", subtotalLbl: "小计金额"
         }
     };
+
+    // Custom notification module replacing default blocky alert box
+    function showToastNotification(msg) {
+        const toast = document.createElement('div');
+        toast.className = 'custom-toast';
+        toast.textContent = msg;
+        document.body.appendChild(toast);
+        setTimeout(() => { toast.classList.add('show'); }, 50);
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => { toast.remove(); }, 500);
+        }, 3500);
+    }
 
     function setLang(lang) {
         localStorage.setItem('selectedLanguage', lang);
@@ -229,6 +328,9 @@
         document.getElementById('btn-view-large').textContent = d.largeView;
         document.getElementById('btn-view-detail').textContent = d.detailView;
         document.getElementById('txt-btn-reset').textContent = d.btnReset;
+        
+        document.getElementById('txt-lbl-total-qty').textContent = d.totalQtyLbl;
+        document.getElementById('txt-lbl-subtotal').textContent = d.subtotalLbl;
 
         renderGrid(lang);
         renderCart(lang);
@@ -323,16 +425,50 @@
         renderCart(localStorage.getItem('selectedLanguage') || 'en');
     }
 
+    // Direct text inputs change validator block
+    function directUpdateQty(id, value) {
+        let parsed = parseInt(value);
+        if (isNaN(parsed) || parsed < 0) {
+            parsed = 0;
+        }
+
+        const maxStock = itemsData[id - 1].stock;
+        
+        // Limit to available stock unless it's the out-of-stock item (which handles substituted modes)
+        if (id !== 1 && parsed > maxStock) {
+            parsed = maxStock;
+            const lang = localStorage.getItem('selectedLanguage') || 'en';
+            const warnMsg = lang === 'zh' 
+                ? `已达到最大库存限制: ${maxStock}` 
+                : `Maximum stock limit reached: ${maxStock}`;
+            showToastNotification(warnMsg);
+        }
+
+        if (parsed === 0) {
+            delete cart[`item-${id}`];
+        } else {
+            cart[`item-${id}`] = parsed;
+            if (id === 1) {
+                saveRouteChoice(1);
+            }
+        }
+
+        saveCartState();
+        renderCart(localStorage.getItem('selectedLanguage') || 'en');
+    }
+
     function renderCart(lang) {
         const container = document.getElementById('cartItemsContainer');
         container.innerHTML = '';
         let subtotal = 0;
+        let totalQuantity = 0;
         let activeLines = 0;
 
         for (let i = 1; i <= 10; i++) {
             const qty = cart[`item-${i}`] || 0;
             if (qty > 0) {
                 activeLines++;
+                totalQuantity += qty;
                 const name = itemNames[lang][i-1];
                 const price = itemsData[i-1].prices;
                 subtotal += (qty * price);
@@ -340,10 +476,11 @@
                 const row = document.createElement('div');
                 row.className = 'cart-item-row';
                 row.innerHTML = `
-                    <div style="max-width:65%; font-weight:600;">${name}</div>
+                    <div style="max-width:55%; font-weight:600;">${name}</div>
                     <div class="cart-qty-control">
                         <button onclick="updateQty(${i}, -1)">-</button>
-                        <span>${qty}</span>
+                        <!-- Editable Input allowing direct typing configuration -->
+                        <input type="number" min="0" value="${qty}" onchange="directUpdateQty(${i}, this.value)">
                         <button onclick="updateQty(${i}, 1)">+</button>
                     </div>
                 `;
@@ -355,6 +492,8 @@
             container.innerHTML = `<div style="text-align:center; padding:20px; color:#aaa; font-size:13px;">${dictionary[lang].emptyCart}</div>`;
         }
 
+        // Output aggregate updates in real-time
+        document.getElementById('valCartTotalQty').textContent = totalQuantity;
         document.getElementById('valCartSubtotal').textContent = subtotal.toFixed(2);
         document.getElementById('valCartTotal').textContent = subtotal.toFixed(2);
     }
@@ -371,21 +510,24 @@
         localStorage.removeItem('samSengTargetRepeatId');
         localStorage.removeItem('samSengTargetRepeatDate');
         
-        alert(dictionary[lang].resetAlert);
+        showToastNotification(dictionary[lang].resetAlert);
         cart = {};
-        window.location.reload();
+        
+        setTimeout(() => {
+            window.location.reload();
+        }, 1000);
     }
 
     function proceedToCheckout() {
         window.location.href = "page2.html";
     }
 
-    window.addEventListener('DOMContentLoaded', () => {
+    window.onload = function() {
         const cached = localStorage.getItem('samSengCart');
         if (cached) cart = JSON.parse(cached);
         setViewMode('large');
         setLang(localStorage.getItem('selectedLanguage') || 'en');
-    });
+    }
 </script>
 </body>
 </html>
