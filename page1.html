@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sam Seng Web Page - Item List</title>
+    <style>
+        :root {
+            --primary-orange: #ff4d2e;
+            --primary-hover: #fb3411;
+            --secondary-blue: #0046b4;
+            --bg-light: #f5f5f5;
+            --border-color: #e5e5e5;
+            --text-dark: #212121;
+            --text-muted: #757575;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            padding: 20px 20px 100px 20px; /* Space for sticky footer bar */
+            line-height: 1.4;
+        }
+
+        .shopee-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Header Layout */
+        .shopee-header {
+            background: linear-gradient(-180deg, var(--primary-orange), #ff6633);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .shopee-header h1 {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .header-meta {
+            display: flex;
+            gap: 25px;
+            font-size: 14px;
+        }
+
+        /* Navigation & Actions */
+        .actions-bar {
+            margin: 20px 0;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .btn-history {
+            background-color: var(--secondary-blue);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 14px;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-history:hover {
+            background-color: #00338a;
+        }
+
+        .repeat-order-box {
+            background: white;
+            border: 1px dashed var(--primary-orange);
+            padding: 8px 15px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .repeat-order-box span {
+            color: #444;
+            font-size: 14px;
+        }
+
+        .btn-repeat {
+            background-color: var(--primary-orange);
+            color: white;
+            border: none;
+            padding: 5px 12px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-repeat:hover {
+            background-color: var(--primary-hover);
+        }
+
+        /* Toolbar / View Controllers */
+        .shopee-toolbar {
+            background: white;
+            margin-bottom: 20px;
+            padding: 15px 20px;
+            border-radius: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+        }
+
+        .toolbar-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #222;
+        }
+
+        .view-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .view-controls label {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .view-btn {
+            background: white;
+            border: 1px solid var(--border-color);
+            padding: 6px 14px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .view-btn.active {
+            color: var(--primary-orange);
+            border-color: var(--primary-orange);
+            background-color: #fff5f3;
+        }
+
+        /* Product Cards Structure Layout */
+        .shopee-card {
+            background: white;
+            border-radius: 6px;
+            border: 1px solid transparent;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+            transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+        }
+
+        .shopee-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+            border-color: var(--primary-orange);
+        }
+
+        .img-container {
+            background-color: #fafafa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #b8b8b8;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .product-name {
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+
+        .product-item-price {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 3px;
+            font-weight: 500;
+        }
+
+        .qty-box {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .qty-box input {
+            width: 55px;
+            padding: 5px;
+            text-align: center;
+            border: 1px solid #ccd0d5;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .price-box {
+            color: var(--primary-orange);
+            font-weight: 700;
+            font-size: 16px;
+            white-space: nowrap;
+        }
+
+        /* OPTION 1: DETAIL VIEW */
+        .product-grid.view-detail {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .view-detail .shopee-card {
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .view-detail .img-container {
+            width: 90px;
+            height: 90px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            flex-shrink: 0;
+        }
+
+        .view-detail .info-container {
+            display: flex;
+            flex-grow: 1;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .view-detail .text-block {
+            max-width: 55%;
+        }
+
+        .view-detail .product-desc {
+            display: block;
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 5px;
+        }
+
+        .view-detail .interactive-row {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        /* OPTION 2: LARGE VIEW */
+        .product-grid.view-large {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+
+        .view-large .shopee-card {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .view-large .img-container {
+            width: 100%;
+            height: 180px;
+            border-bottom: 1px solid var(--border-color);
+            border-top-left-radius: 6px;
+            border-top-right-radius: 6px;
+        }
+
+        .view-large .info-container {
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .view-large .product-desc {
+            display: none;
+        }
+
+        .view-large .interactive-row {
+            margin-top: auto;
+            padding-top: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: flex-start;
+            width: 100%;
+        }
+        
+        .view-large .interactive-row .price-box {
+            align-self: flex-end;
+            margin-top: -28px;
+        }
+
+        /* STICKY PURCHASE FOOTER BAR */
+        .shopee-footer-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: white;
+            box-shadow: 0 -4px 12px rgba(0,0,0,0.08);
+            border-top: 1px solid var(--border-color);
+            padding: 15px 20px;
+            z-index: 999;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .grand-total-label {
+            font-size: 15px;
+            color: #333;
+        }
+
+        .grand-total-price {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary-orange);
+            margin-left: 5px;
+        }
+
+        .btn-checkout {
+            background: linear-gradient(90deg, #ff6633, var(--primary-orange));
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            padding: 12px 40px;
+            border-radius: 4px;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(255, 77, 46, 0.3);
+        }
+
+        /* --- POPUP MODAL STYLING --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+        }
+
+        .modal-overlay.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-window {
+            background: white;
+            width: 480px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            overflow: hidden;
+            animation: slideDown 0.2s ease;
+        }
+
+        .modal-header {
+            background-color: #fff1f0;
+            color: #d93025;
+            padding: 15px 20px;
+            font-size: 16px;
+            font-weight: 600;
+            border-bottom: 1px solid #fcdbda;
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .modal-body p {
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .stock-alert-text {
+            font-weight: bold;
+            color: var(--primary-orange);
+        }
+
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .option-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .option-item:hover {
+            border-color: var(--primary-orange);
+            background-color: #fff5f3;
+        }
+
+        .option-item input[type="radio"] {
+            margin-top: 3px;
+            accent-color: var(--primary-orange);
+        }
+
+        .option-label {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+
+        .modal-footer {
+            padding: 15px 20px;
+            background: #f8f9fa;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .btn-modal-ok {
+            background-color: var(--primary-orange);
+            color: white;
+            border: none;
+            padding: 8px 24px;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .btn-modal-ok:hover {
+            background-color: var(--primary-hover);
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-20px); }
+            to { transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="shopee-container">
+    <!-- Page Header -->
+    <header class="shopee-header">
+        <h1>Sam Seng Web Page</h1>
+        <div class="header-meta">
+            <div>Language: <strong>EN / CN</strong></div>
+            <div>User: <strong>Login User Name</strong></div>
+        </div>
+    </header>
+
+    <!-- Navigation / Quick Actions -->
+    <div class="actions-bar">
+        <a href="page4.html" class="btn-history">Purchase History</a>
+        <div class="repeat-order-box">
+            <span>Repeat Last Order?</span>
+            <a href="page3.html" class="btn-repeat">Repeat Last Order</a>
+        </div>
+    </div>
+
+    <!-- Toolbar Layout -->
+    <div class="shopee-toolbar">
+        <div class="toolbar-title">Item List</div>
+        <div class="view-controls">
+            <label>Display Method:</label>
+            <button class="view-btn active" id="btnDetail" onclick="changeDisplayMode('detail')">Option 1: Detail</button>
+            <button class="view-btn" id="btnLarge" onclick="changeDisplayMode('large')">Option 2: Large</button>
+        </div>
+    </div>
+
+    <!-- Product Catalog Grid -->
+    <div id="catalogGrid" class="product-grid view-detail">
+        <!-- Item 1 -->
+        <div class="shopee-card">
+            <div class="img-container">[Item 1 Picture]</div>
+            <div class="info-container">
+                <div class="text-block">
+                    <h4 class="product-name">Premium Wireless Headphones</h4>
+                    <div class="product-item-price">Unit Price: SGD 45.00</div>
+                    <p class="product-desc">Advanced active noise-cancelling over-ear layout headphones featuring premium audio performance and 40 hours of battery life.</p>
+                </div>
+                <div class="interactive-row">
+                    <div class="qty-box">
+                        <span>Qty:</span>
+                        <input type="number" id="headphones-qty" value="0" min="0" data-unit-price="45.00" oninput="calculateCardTotal(this)">
+                    </div>
+                    <div class="price-box">SGD: <span class="calculated-price">0.00</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Item 2 -->
+        <div class="shopee-card">
+            <div class="img-container">[Item 2 Picture]</div>
+            <div class="info-container">
+                <div class="text-block">
+                    <h4 class="product-name">Ergonomic Mechanical Keyboard</h4>
+                    <div class="product-item-price">Unit Price: SGD 89.90</div>
+                    <p class="product-desc">Vibrant RGB backlit keyboard engineered with tactile mechanical switches built for smooth gaming and office layout productivity.</p>
+                </div>
+                <div class="interactive-row">
+                    <div class="qty-box">
+                        <span>Qty:</span>
+                        <input type="number" value="0" min="0" data-unit-price="89.90" oninput="calculateCardTotal(this)">
+                    </div>
+                    <div class="price-box">SGD: <span class="calculated-price">0.00</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Item 3 to 8 (Truncated for clean rendering context, keep your local copies populated) -->
+        <!-- Item 3 -->
+        <div class="shopee-card">
+            <div class="img-container">[Item 3 Picture]</div>
+            <div class="info-container">
+                <div class="text-block">
+                    <h4 class="product-name">Ultra-Wide Curved Monitor</h4>
+                    <div class="product-item-price">Unit Price: SGD 320.00</div>
+                    <p class="product-desc">Immersive 32-inch curved panorama gaming monitor screen highlighting crisp graphics resolution.</p>
+                </div>
+                <div class="interactive-row">
+                    <div class="qty-box"><span>Qty:</span><input type="number" value="0" min="0" data-unit-price="320.00" oninput="calculateCardTotal(this)"></div>
+                    <div class="price-box">SGD: <span class="calculated-price">0.00</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Sticky Bottom Total & Checkout Bar -->
+<div class="shopee-footer-bar">
+    <div class="footer-content">
+        <div class="grand-total-label">
+            Total Combined Price: <span class="grand-total-price">SGD <span id="grandTotalDisplay">0.00</span></span>
+        </div>
+        <button class="btn-checkout" onclick="handleCheckoutClick()">Proceed to Purchase</button>
+    </div>
+</div>
+
+<!-- --- POPUP MODAL WINDOW CONTENT --- -->
+<div class="modal-overlay" id="stockModal">
+    <div class="modal-window">
+        <div class="modal-header">⚠️ Notice: Stock Unavailability</div>
+        <div class="modal-body">
+            <p>We are sorry! The item <span class="stock-alert-text">"Premium Wireless Headphones"</span> is currently <span class="stock-alert-text">OUT OF STOCK</span>.</p>
+            <p>Please select an option to proceed:</p>
+            
+            <div class="options-list">
+                <label class="option-item">
+                    <input type="radio" name="stockOption" value="1" checked>
+                    <div class="option-label">Option 1: Change to other brand</div>
+                </label>
+                <label class="option-item">
+                    <input type="radio" name="stockOption" value="2">
+                    <div class="option-label">Option 2: Put under waiting list (System alerts you when available)</div>
+                </label>
+                <label class="option-item">
+                    <input type="radio" name="stockOption" value="3">
+                    <div class="option-label">Option 3: Chat with Customer Service</div>
+                </label>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-modal-ok" onclick="submitModalChoice()">OK</button>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript Logic Engine -->
+<script>
+    function changeDisplayMode(mode) {
+        const grid = document.getElementById('catalogGrid');
+        const btnDetail = document.getElementById('btnDetail');
+        const btnLarge = document.getElementById('btnLarge');
+        if (mode === 'detail') {
+            grid.className = 'product-grid view-detail';
+            btnDetail.classList.add('active');
+            btnLarge.classList.remove('active');
+        } else {
+            grid.className = 'product-grid view-large';
+            btnLarge.classList.add('active');
+            btnDetail.classList.remove('active');
+        }
+    }
+
+    function calculateCardTotal(inputField) {
+        let qty = parseInt(inputField.value);
+        if (isNaN(qty) || qty < 0) { qty = 0; inputField.value = 0; }
+        const baseUnitPrice = parseFloat(inputField.getAttribute('data-unit-price'));
+        const targetCard = inputField.closest('.shopee-card');
+        targetCard.querySelector('.calculated-price').textContent = (qty * baseUnitPrice).toFixed(2);
+        calculateGrandTotal();
+    }
+
+    function calculateGrandTotal() {
+        let sum = 0;
+        document.querySelectorAll('.calculated-price').forEach(span => sum += parseFloat(span.textContent));
+        document.getElementById('grandTotalDisplay').textContent = sum.toFixed(2);
+    }
+
+    // Intercept checkout to look if headphones are in the cart
+    function handleCheckoutClick() {
+        const headphonesQty = parseInt(document.getElementById('headphones-qty').value) || 0;
+        
+        if (headphonesQty > 0) {
+            // If they picked headphones, show the options window popup
+            document.getElementById('stockModal').classList.add('open');
+        } else {
+            // Otherwise go directly to checkout
+            window.location.href = "page2.html";
+        }
+    }
+
+    // Process selection and navigate
+    function submitModalChoice() {
+        const selectedOption = document.querySelector('input[name="stockOption"]:checked').value;
+        document.getElementById('stockModal').classList.remove('open');
+        
+        // You can intercept selectedOption (1, 2, or 3) later for backend use.
+        // Proceeding to page 2 now:
+        window.location.href = "page2.html";
+    }
+</script>
+
+</body>
+</html>
