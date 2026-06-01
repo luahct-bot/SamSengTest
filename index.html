@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sam Seng Portal - System Entry</title>
+    <style>
+        :root {
+            --primary-orange: #ff4d2e;
+            --primary-hover: #fb3411;
+            --secondary-blue: #0046b4;
+            --bg-light: #f5f5f5;
+            --text-dark: #212121;
+            --text-muted: #757575;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body, html {
+            width: 100%;
+            height: 100%;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Technology & AI Inspired Subtle Background Grid */
+        .ai-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 50% 50%, rgba(255, 77, 46, 0.08), transparent 70%),
+                linear-gradient(rgba(229, 229, 229, 0.5) 1.5px, transparent 1.5px) 0 0 / 50px 50px,
+                linear-gradient(90deg, rgba(229, 229, 229, 0.5) 1.5px, transparent 1.5px) 0 0 / 50px 50px;
+            z-index: 1;
+        }
+
+        /* Decorative Light Node Paths mimicking AI Network Nodes */
+        .ai-nodes {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .node {
+            position: absolute;
+            background: var(--primary-orange);
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(255, 77, 46, 0.4);
+            animation: pulse 4s infinite ease-in-out;
+            opacity: 0.25;
+        }
+
+        .node-1 { width: 6px; height: 6px; top: 25%; left: 18%; animation-delay: 0s; }
+        .node-2 { width: 8px; height: 8px; top: 70%; left: 78%; animation-delay: 1s; }
+        .node-3 { width: 5px; height: 5px; top: 35%; left: 82%; animation-delay: 1.5s; }
+        .node-4 { width: 7px; height: 7px; top: 78%; left: 22%; animation-delay: 2s; }
+
+        /* Central Portal Card Hub - Styled to match the system theme */
+        .portal-container {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: 50px 60px;
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+            max-width: 580px;
+            width: 90%;
+        }
+
+        /* Tech Corner Border Extensions using matching system secondary blue */
+        .portal-container::before, .portal-container::after {
+            content: '';
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            border-color: var(--secondary-blue);
+            border-style: solid;
+            pointer-events: none;
+        }
+
+        .portal-container::before {
+            top: -2px; left: -2px;
+            border-width: 3px 0 0 3px;
+            border-top-left-radius: 12px;
+        }
+
+        .portal-container::after {
+            bottom: -2px; right: -2px;
+            border-width: 0 3px 3px 0;
+            border-bottom-right-radius: 12px;
+        }
+
+        /* Corporate Branding Typography */
+        .system-title {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: var(--secondary-blue);
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+
+        .main-heading {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 15px;
+            letter-spacing: 0.5px;
+        }
+
+        .system-status {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 45px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #26a541; /* Secure Active Green */
+            border-radius: 50%;
+            box-shadow: 0 0 8px rgba(38, 165, 65, 0.5);
+            display: inline-block;
+            animation: blink 1.5s infinite;
+        }
+
+        /* --- CENTRAL PURCHASE PORTAL ACTION BUTTON --- */
+        .btn-portal-entry {
+            background: linear-gradient(-180deg, var(--primary-orange), #ff6633);
+            color: white;
+            font-size: 18px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            padding: 16px 50px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 4px 15px rgba(255, 77, 46, 0.35);
+            transition: all 0.2s ease;
+        }
+
+        /* Hover Transformation Matching standard UI buttons */
+        .btn-portal-entry:hover {
+            background: var(--primary-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(255, 77, 46, 0.45);
+        }
+
+        /* CSS Animation Matrices */
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.2; }
+            50% { transform: scale(1.4); opacity: 0.5; }
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="ai-background"></div>
+    
+    <div class="ai-nodes">
+        <div class="node node-1"></div>
+        <div class="node node-2"></div>
+        <div class="node node-3"></div>
+        <div class="node node-4"></div>
+    </div>
+
+    <main class="portal-container">
+        <div class="system-title">Sam Seng Web System</div>
+        <h1 class="main-heading">AI Management Node</h1>
+        
+        <div class="system-status">
+            <span class="status-dot"></span> Core System Node Active
+        </div>
+
+        <a href="page1.html" class="btn-portal-entry">
+            Online Purchase
+        </a>
+    </main>
+
+</body>
+</html>
