@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sam Seng Web Page - Item List</title>
+    <title>Sam Seng Online Portal - Storefront</title>
     <style>
         :root {
             --primary-orange: #ff4d2e;
@@ -14,657 +14,378 @@
             --text-dark: #212121;
             --text-muted: #757575;
         }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            background-color: var(--bg-light);
-            color: var(--text-dark);
-            padding: 20px 20px 100px 20px; /* Space for sticky footer bar */
-            line-height: 1.4;
-        }
-
-        .shopee-container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        /* Header Layout */
-        .shopee-header {
-            background: linear-gradient(-180deg, var(--primary-orange), #ff6633);
-            color: white;
-            padding: 15px 20px;
-            border-radius: 6px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        }
-
-        .shopee-header h1 {
-            font-size: 22px;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-        }
-
-        .header-meta {
-            display: flex;
-            gap: 25px;
-            font-size: 14px;
-        }
-
-        /* Navigation & Actions */
-        .actions-bar {
-            margin: 20px 0;
-            display: flex;
-            gap: 15px;
-            align-items: center;
-        }
-
-        .btn-history {
-            background-color: var(--secondary-blue);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: 500;
-            font-size: 14px;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .btn-history:hover {
-            background-color: #00338a;
-        }
-
-        .repeat-order-box {
-            background: white;
-            border: 1px dashed var(--primary-orange);
-            padding: 8px 15px;
-            border-radius: 4px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .repeat-order-box span {
-            color: #444;
-            font-size: 14px;
-        }
-
-        .btn-repeat {
-            background-color: var(--primary-orange);
-            color: white;
-            border: none;
-            padding: 5px 12px;
-            border-radius: 3px;
-            cursor: pointer;
-            font-size: 13px;
-            font-weight: 500;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .btn-repeat:hover {
-            background-color: var(--primary-hover);
-        }
-
-        /* Toolbar / View Controllers */
-        .shopee-toolbar {
-            background: white;
-            margin-bottom: 20px;
-            padding: 15px 20px;
-            border-radius: 6px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.03);
-        }
-
-        .toolbar-title {
-            font-size: 18px;
-            font-weight: 600;
-            color: #222;
-        }
-
-        .view-controls {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .view-controls label {
-            font-size: 14px;
-            color: var(--text-muted);
-        }
-
-        .view-btn {
-            background: white;
-            border: 1px solid var(--border-color);
-            padding: 6px 14px;
-            cursor: pointer;
-            border-radius: 4px;
-            font-size: 13px;
-            font-weight: 500;
-        }
-
-        .view-btn.active {
-            color: var(--primary-orange);
-            border-color: var(--primary-orange);
-            background-color: #fff5f3;
-        }
-
-        /* Product Cards Structure Layout */
-        .shopee-card {
-            background: white;
-            border-radius: 6px;
-            border: 1px solid transparent;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.03);
-            transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
-        }
-
-        .shopee-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(0,0,0,0.08);
-            border-color: var(--primary-orange);
-        }
-
-        .img-container {
-            background-color: #fafafa;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #b8b8b8;
-            font-size: 14px;
-            font-weight: bold;
-        }
-
-        .product-name {
-            font-size: 15px;
-            font-weight: 500;
-            color: var(--text-dark);
-        }
-
-        .product-item-price {
-            font-size: 13px;
-            color: var(--text-muted);
-            margin-top: 3px;
-            font-weight: 500;
-        }
-
-        .qty-box {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 14px;
-            font-weight: 500;
-        }
-
-        .qty-box input {
-            width: 55px;
-            padding: 5px;
-            text-align: center;
-            border: 1px solid #ccd0d5;
-            border-radius: 4px;
-            font-size: 14px;
-        }
-
-        .price-box {
-            color: var(--primary-orange);
-            font-weight: 700;
-            font-size: 16px;
-            white-space: nowrap;
-        }
-
-        /* OPTION 1: DETAIL VIEW */
-        .product-grid.view-detail {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .view-detail .shopee-card {
-            padding: 15px 20px;
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .view-detail .img-container {
-            width: 90px;
-            height: 90px;
-            border: 1px solid var(--border-color);
-            border-radius: 4px;
-            flex-shrink: 0;
-        }
-
-        .view-detail .info-container {
-            display: flex;
-            flex-grow: 1;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .view-detail .text-block {
-            max-width: 55%;
-        }
-
-        .view-detail .product-desc {
-            display: block;
-            font-size: 13px;
-            color: var(--text-muted);
-            margin-top: 5px;
-        }
-
-        .view-detail .interactive-row {
-            display: flex;
-            align-items: center;
-            gap: 30px;
-        }
-
-        /* OPTION 2: LARGE VIEW */
-        .product-grid.view-large {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 16px;
-        }
-
-        .view-large .shopee-card {
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-        }
-
-        .view-large .img-container {
-            width: 100%;
-            height: 180px;
-            border-bottom: 1px solid var(--border-color);
-            border-top-left-radius: 6px;
-            border-top-right-radius: 6px;
-        }
-
-        .view-large .info-container {
-            padding: 15px;
-            display: flex;
-            flex-direction: column;
-            flex-grow: 1;
-        }
-
-        .view-large .product-desc {
-            display: none;
-        }
-
-        .view-large .interactive-row {
-            margin-top: auto;
-            padding-top: 15px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            align-items: flex-start;
-            width: 100%;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: var(--bg-light); color: var(--text-dark); padding: 15px 15px 120px 15px; }
+        .shopee-container { max-width: 1200px; margin: 0 auto; }
         
-        .view-large .interactive-row .price-box {
-            align-self: flex-end;
-            margin-top: -28px;
+        .shopee-header { 
+            background: linear-gradient(-180deg, var(--primary-orange), #ff6633); 
+            color: white; 
+            padding: 15px 20px; 
+            border-radius: 6px; 
+            display: flex; 
+            flex-wrap: wrap; 
+            gap: 15px; 
+            justify-content: space-between; 
+            align-items: center; 
         }
+        .shopee-header h1 { font-size: 22px; font-weight: 700; }
+        .header-meta { display: flex; flex-wrap: wrap; gap: 15px; font-size: 14px; align-items: center; }
+        
+        .lang-switch-span a { color: white; text-decoration: none; font-weight: normal; cursor: pointer; }
+        .lang-switch-span a.active { font-weight: bold; text-decoration: underline; }
 
-        /* STICKY PURCHASE FOOTER BAR */
-        .shopee-footer-bar {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background-color: white;
-            box-shadow: 0 -4px 12px rgba(0,0,0,0.08);
-            border-top: 1px solid var(--border-color);
-            padding: 15px 20px;
-            z-index: 999;
+        .btn-history-nav { background-color: rgba(255, 255, 255, 0.2); color: white; border: 1px solid rgba(255, 255, 255, 0.6); padding: 6px 14px; border-radius: 4px; font-size: 13px; font-weight: 600; text-decoration: none; cursor: pointer; transition: all 0.2s; }
+        .btn-history-nav:hover { background-color: white; color: var(--primary-orange); }
+
+        .btn-reset-history { background-color: #444; color: white; border: none; padding: 6px 12px; font-size: 12px; font-weight: 600; border-radius: 4px; cursor: pointer; }
+        .btn-reset-history:hover { background-color: #222; }
+
+        .store-title-bar { background: white; padding: 15px 20px; border-radius: 6px; margin: 20px 0 15px 0; font-size: 18px; font-weight: 600; border-left: 4px solid var(--primary-orange); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+        
+        .view-toggle-buttons { display: inline-flex; border: 1px solid var(--border-color); border-radius: 4px; overflow: hidden; background: #eee; }
+        .view-toggle-buttons button { background: #fdfdfd; border: none; padding: 8px 14px; font-size: 12px; cursor: pointer; font-weight: 500; color: #555; }
+        .view-toggle-buttons button.active { background: var(--primary-orange); color: white; font-weight: 600; }
+
+        .store-layout { display: grid; grid-template-columns: 68% 30%; gap: 2%; align-items: start; }
+        .shelf-card { background: white; border-radius: 6px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.03); }
+        
+        .product-grid { display: grid; gap: 15px; }
+        .product-grid.view-large { grid-template-columns: repeat(2, 1fr); }
+        .product-grid.view-detail { grid-template-columns: 1fr; }
+
+        .product-item { border: 1px solid var(--border-color); border-radius: 6px; padding: 15px; background: #fff; transition: border-color 0.15s; }
+        .product-item:hover { border-color: var(--primary-orange); }
+        
+        .view-large .product-item { display: flex; flex-direction: column; justify-content: space-between; min-height: 220px; }
+        .view-detail .product-item { display: flex; flex-direction: row; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 15px; padding: 15px; }
+
+        .prod-info { flex: 1; }
+        .view-detail .prod-info { display: flex; flex-wrap: wrap; align-items: center; gap: 15px; justify-content: space-between; width: 70%; }
+        
+        .prod-title-box { font-size: 14px; font-weight: 600; color: var(--text-dark); margin-bottom: 5px; }
+        .view-large .prod-title-box { height: 38px; overflow: hidden; }
+        .view-detail .prod-title-box { margin-bottom: 0; width: 40%; min-width: 150px; }
+
+        .prod-price-box { font-size: 15px; font-weight: 700; color: var(--primary-orange); margin-bottom: 8px; }
+        .view-detail .prod-price-box { margin-bottom: 0; width: 20%; text-align: right; }
+
+        .stock-status-line { font-size: 12px; margin-bottom: 12px; font-weight: 500; }
+        .view-detail .stock-status-line { margin-bottom: 0; width: 30%; text-align: right; }
+        .status-instock { color: #2ecc71; }
+        .status-out { color: #e74c3c; }
+
+        .action-container { width: 100%; }
+        .view-detail .action-container { width: auto; text-align: right; }
+
+        .btn-add-cart { background-color: var(--primary-orange); color: white; border: none; width: 100%; padding: 12px; font-size: 13px; font-weight: 600; border-radius: 4px; cursor: pointer; min-height: 44px; }
+        .btn-add-cart:hover { background-color: var(--primary-hover); }
+
+        .exception-box { background-color: #fff3e0; border: 1px solid #ffe0b2; border-radius: 4px; padding: 8px; margin: 8px 0; font-size: 12px; width: 100%; }
+        .exception-box select { width: 100%; padding: 8px; margin-top: 4px; border-radius: 4px; border: 1px solid #ccc; font-size: 12px; }
+
+        .cart-card { background: white; border-radius: 6px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.03); position: sticky; top: 20px; }
+        .cart-item-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px dashed #f5f5f5; font-size: 13px; gap: 10px; }
+        .cart-qty-control { display: flex; align-items: center; gap: 8px; }
+        .cart-qty-control button { width: 28px; height: 28px; background: #eee; border: 1px solid #ccc; border-radius: 3px; cursor: pointer; font-weight: bold; font-size: 14px; display: inline-flex; align-items: center; justify-content: center; }
+        
+        .cart-summary { border-top: 1px solid var(--border-color); margin-top: 15px; padding-top: 15px; font-size: 14px; display: flex; flex-direction: column; gap: 6px; }
+        .cart-total-line { font-weight: 700; font-size: 16px; margin-top: 5px; display: flex; justify-content: space-between; }
+        .cart-total-line span.price { color: var(--primary-orange); }
+
+        .btn-checkout { background: linear-gradient(90deg, #ff6633, var(--primary-orange)); color: white; border: none; width: 100%; padding: 12px; font-size: 15px; font-weight: 600; border-radius: 4px; cursor: pointer; margin-top: 15px; display: block; text-align: center; text-decoration: none; box-shadow: 0 4px 10px rgba(255, 77, 46, 0.2); min-height: 44px; }
+
+        @media (max-width: 991px) {
+            .store-layout { grid-template-columns: 1fr; gap: 20px; }
+            .cart-card { position: static; margin-top: 15px; }
         }
-
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            gap: 30px;
-        }
-
-        .grand-total-label {
-            font-size: 15px;
-            color: #333;
-        }
-
-        .grand-total-price {
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--primary-orange);
-            margin-left: 5px;
-        }
-
-        .btn-checkout {
-            background: linear-gradient(90deg, #ff6633, var(--primary-orange));
-            color: white;
-            font-size: 16px;
-            font-weight: 600;
-            border: none;
-            padding: 12px 40px;
-            border-radius: 4px;
-            cursor: pointer;
-            box-shadow: 0 2px 4px rgba(255, 77, 46, 0.3);
-        }
-
-        /* --- POPUP MODAL STYLING --- */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 10000;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.2s ease;
-        }
-
-        .modal-overlay.open {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        .modal-window {
-            background: white;
-            width: 480px;
-            border-radius: 8px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-            overflow: hidden;
-            animation: slideDown 0.2s ease;
-        }
-
-        .modal-header {
-            background-color: #fff1f0;
-            color: #d93025;
-            padding: 15px 20px;
-            font-size: 16px;
-            font-weight: 600;
-            border-bottom: 1px solid #fcdbda;
-        }
-
-        .modal-body {
-            padding: 20px;
-        }
-
-        .modal-body p {
-            font-size: 14px;
-            color: #333;
-            margin-bottom: 15px;
-        }
-
-        .stock-alert-text {
-            font-weight: bold;
-            color: var(--primary-orange);
-        }
-
-        .options-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-top: 10px;
-        }
-
-        .option-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 10px;
-            background: #f8f9fa;
-            padding: 12px;
-            border-radius: 6px;
-            border: 1px solid var(--border-color);
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .option-item:hover {
-            border-color: var(--primary-orange);
-            background-color: #fff5f3;
-        }
-
-        .option-item input[type="radio"] {
-            margin-top: 3px;
-            accent-color: var(--primary-orange);
-        }
-
-        .option-label {
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--text-dark);
-        }
-
-        .modal-footer {
-            padding: 15px 20px;
-            background: #f8f9fa;
-            border-top: 1px solid var(--border-color);
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-        }
-
-        .btn-modal-ok {
-            background-color: var(--primary-orange);
-            color: white;
-            border: none;
-            padding: 8px 24px;
-            font-size: 14px;
-            font-weight: 600;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        .btn-modal-ok:hover {
-            background-color: var(--primary-hover);
-        }
-
-        @keyframes slideDown {
-            from { transform: translateY(-20px); }
-            to { transform: translateY(0); }
+        @media (max-width: 576px) {
+            .shopee-header { flex-direction: column; text-align: center; }
+            .header-meta { justify-content: center; }
+            .product-grid.view-large { grid-template-columns: 1fr; }
+            .view-detail .product-item { flex-direction: column; align-items: stretch; }
+            .view-detail .prod-info { width: 100%; flex-direction: column; align-items: stretch; text-align: left; }
+            .view-detail .prod-title-box, .view-detail .prod-price-box, .view-detail .stock-status-line { width: 100%; text-align: left; }
+            .view-detail .action-container { width: 100%; margin-top: 10px; }
         }
     </style>
 </head>
 <body>
 
 <div class="shopee-container">
-    <!-- Page Header -->
     <header class="shopee-header">
-        <h1>Sam Seng Web Page</h1>
+        <h1 id="txt-h1">Sam Seng Online Portal</h1>
         <div class="header-meta">
-            <div>Language: <strong>EN / CN</strong></div>
-            <div>User: <strong>Login User Name</strong></div>
+            <button class="btn-reset-history" id="txt-btn-reset" onclick="clearSystemHistory()">Clear History</button>
+            <a href="page4.html" class="btn-history-nav" id="txt-btn-history">Purchase History</a>
+            
+            <div class="lang-switch-span">
+                <span id="txt-lang-lbl">Language</span>: 
+                <a id="m-lang-en" onclick="setLang('en')">EN</a> / 
+                <a id="m-lang-zh" onclick="setLang('zh')">CN</a>
+            </div>
+            <div><span id="txt-user-lbl">User</span>: <strong id="txt-username">Customer Name</strong></div>
         </div>
     </header>
 
-    <!-- Navigation / Quick Actions -->
-    <div class="actions-bar">
-        <a href="page4.html" class="btn-history">Purchase History</a>
-        <div class="repeat-order-box">
-            <span>Repeat Last Order?</span>
-            <a href="page3.html" class="btn-repeat">Repeat Last Order</a>
-        </div>
-    </div>
-
-    <!-- Toolbar Layout -->
-    <div class="shopee-toolbar">
-        <div class="toolbar-title">Item List</div>
-        <div class="view-controls">
-            <label>Display Method:</label>
-            <button class="view-btn active" id="btnDetail" onclick="changeDisplayMode('detail')">Option 1: Detail</button>
-            <button class="view-btn" id="btnLarge" onclick="changeDisplayMode('large')">Option 2: Large</button>
-        </div>
-    </div>
-
-    <!-- Product Catalog Grid -->
-    <div id="catalogGrid" class="product-grid view-detail">
-        <!-- Item 1 -->
-        <div class="shopee-card">
-            <div class="img-container">[Item 1 Picture]</div>
-            <div class="info-container">
-                <div class="text-block">
-                    <h4 class="product-name">Premium Wireless Headphones</h4>
-                    <div class="product-item-price">Unit Price: SGD 45.00</div>
-                    <p class="product-desc">Advanced active noise-cancelling over-ear layout headphones featuring premium audio performance and 40 hours of battery life.</p>
-                </div>
-                <div class="interactive-row">
-                    <div class="qty-box">
-                        <span>Qty:</span>
-                        <input type="number" id="headphones-qty" value="0" min="0" data-unit-price="45.00" oninput="calculateCardTotal(this)">
-                    </div>
-                    <div class="price-box">SGD: <span class="calculated-price">0.00</span></div>
+    <div class="store-layout">
+        <div class="shelf-card">
+            <div class="shelf-control-header" style="display:flex; justify-content:space-between; align-items:center; padding-bottom:10px; margin-bottom:15px; border-bottom:1px solid var(--border-color); flex-wrap:wrap; gap:10px;">
+                <div class="shelf-title" id="txt-shelf-title">Fresh Daily Groceries Storefront</div>
+                
+                <div class="view-toggle-buttons">
+                    <button id="btn-view-large" onclick="setViewMode('large')">Large View</button>
+                    <button id="btn-view-detail" onclick="setViewMode('detail')">Detailed View</button>
                 </div>
             </div>
-        </div>
-
-        <!-- Item 2 -->
-        <div class="shopee-card">
-            <div class="img-container">[Item 2 Picture]</div>
-            <div class="info-container">
-                <div class="text-block">
-                    <h4 class="product-name">Ergonomic Mechanical Keyboard</h4>
-                    <div class="product-item-price">Unit Price: SGD 89.90</div>
-                    <p class="product-desc">Vibrant RGB backlit keyboard engineered with tactile mechanical switches built for smooth gaming and office layout productivity.</p>
-                </div>
-                <div class="interactive-row">
-                    <div class="qty-box">
-                        <span>Qty:</span>
-                        <input type="number" value="0" min="0" data-unit-price="89.90" oninput="calculateCardTotal(this)">
-                    </div>
-                    <div class="price-box">SGD: <span class="calculated-price">0.00</span></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Item 3 to 8 (Truncated for clean rendering context, keep your local copies populated) -->
-        <!-- Item 3 -->
-        <div class="shopee-card">
-            <div class="img-container">[Item 3 Picture]</div>
-            <div class="info-container">
-                <div class="text-block">
-                    <h4 class="product-name">Ultra-Wide Curved Monitor</h4>
-                    <div class="product-item-price">Unit Price: SGD 320.00</div>
-                    <p class="product-desc">Immersive 32-inch curved panorama gaming monitor screen highlighting crisp graphics resolution.</p>
-                </div>
-                <div class="interactive-row">
-                    <div class="qty-box"><span>Qty:</span><input type="number" value="0" min="0" data-unit-price="320.00" oninput="calculateCardTotal(this)"></div>
-                    <div class="price-box">SGD: <span class="calculated-price">0.00</span></div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Sticky Bottom Total & Checkout Bar -->
-<div class="shopee-footer-bar">
-    <div class="footer-content">
-        <div class="grand-total-label">
-            Total Combined Price: <span class="grand-total-price">SGD <span id="grandTotalDisplay">0.00</span></span>
-        </div>
-        <button class="btn-checkout" onclick="handleCheckoutClick()">Proceed to Purchase</button>
-    </div>
-</div>
-
-<!-- --- POPUP MODAL WINDOW CONTENT --- -->
-<div class="modal-overlay" id="stockModal">
-    <div class="modal-window">
-        <div class="modal-header">⚠️ Notice: Stock Unavailability</div>
-        <div class="modal-body">
-            <p>We are sorry! The item <span class="stock-alert-text">"Premium Wireless Headphones"</span> is currently <span class="stock-alert-text">OUT OF STOCK</span>.</p>
-            <p>Please select an option to proceed:</p>
             
-            <div class="options-list">
-                <label class="option-item">
-                    <input type="radio" name="stockOption" value="1" checked>
-                    <div class="option-label">Option 1: Change to other brand</div>
-                </label>
-                <label class="option-item">
-                    <input type="radio" name="stockOption" value="2">
-                    <div class="option-label">Option 2: Put under waiting list (System alerts you when available)</div>
-                </label>
-                <label class="option-item">
-                    <input type="radio" name="stockOption" value="3">
-                    <div class="option-label">Option 3: Chat with Customer Service</div>
-                </label>
-            </div>
+            <div class="product-grid view-large" id="productGridContainer"></div>
         </div>
-        <div class="modal-footer">
-            <button class="btn-modal-ok" onclick="submitModalChoice()">OK</button>
+
+        <div class="cart-card">
+            <div style="font-size: 16px; font-weight: 600; padding-bottom: 10px; border-bottom: 1px solid var(--border-color); margin-bottom: 15px;" id="txt-cart-title">My Grocery Basket</div>
+            <div id="cartItemsContainer"></div>
+            
+            <div class="cart-summary">
+                <div>Subtotal: SGD <span id="valCartSubtotal">0.00</span></div>
+                <div class="cart-total-line">
+                    <span id="txt-lbl-est">Est. Total</span>: 
+                    <span class="price">SGD <span id="valCartTotal">0.00</span></span>
+                </div>
+            </div>
+            <button class="btn-checkout" id="txt-btn-checkout" onclick="proceedToCheckout()">Proceed to Checkout</button>
         </div>
     </div>
 </div>
 
-<!-- JavaScript Logic Engine -->
 <script>
-    function changeDisplayMode(mode) {
-        const grid = document.getElementById('catalogGrid');
-        const btnDetail = document.getElementById('btnDetail');
-        const btnLarge = document.getElementById('btnLarge');
-        if (mode === 'detail') {
-            grid.className = 'product-grid view-detail';
-            btnDetail.classList.add('active');
-            btnLarge.classList.remove('active');
-        } else {
+    let cart = {};
+    let currentViewMode = 'large';
+
+    const itemsData = [
+        { id: 1, prices: 3.95, stock: 0 }, 
+        { id: 2, prices: 3.20, stock: 15 },
+        { id: 3, prices: 14.80, stock: 8 },
+        { id: 4, prices: 12.50, stock: 20 },
+        { id: 5, prices: 11.90, stock: 12 },
+        { id: 6, prices: 4.50, stock: 30 },
+        { id: 7, prices: 1.80, stock: 25 },
+        { id: 8, prices: 24.90, stock: 5 },
+        { id: 9, prices: 5.50, stock: 40 },
+        { id: 10, prices: 7.95, stock: 18 }
+    ];
+
+    const itemNames = {
+        en: [
+            "Fresh Premium Whole Milk (1L)", "Farm Fresh Grade A Eggs (10s)", "Premium Jasmine Fragrant Rice (5kg)",
+            "Organic Extra Virgin Olive Oil (500ml)", "Fresh Atlantic Salmon Fillet (250g)", "Sweet Fuji Apples (5s Pack)",
+            "Locally Grown Fresh Spinach (200g)", "Premium Angus Ribeye Steak (300g)", "Multi-Purpose Disinfectant Wipes (80s)",
+            "Ultra Soft 3-Ply Bathroom Tissue (10s)"
+        ],
+        zh: [
+            "全脂鲜牛奶 (1升装)", "农场大号新鲜A级鸡蛋 (10粒装)", "优质泰国香米 (5公斤袋装)",
+            "有机特级初榨橄榄油 (500毫升)", "新鲜大西洋三文鱼柳 (250克)", "鲜甜高山富士苹果 (5个精装)",
+            "当地菜园直供新鲜嫩菠菜 (200克)", "特级安格斯肉眼牛排 (300克原切)", "居家多用途高效消毒湿巾 (80张)",
+            "超柔软三层立体印花卫生纸 (10卷装)"
+        ]
+    };
+
+    const dictionary = {
+        en: {
+            title: "Sam Seng Online Portal", langLbl: "Language", userLbl: "User", username: "Customer Name",
+            historyBtn: "Purchase History", shelfTitle: "Fresh Daily Groceries Storefront", cartTitle: "My Grocery Basket",
+            estTotal: "Est. Total", btnCheckout: "Proceed to Checkout", btnAdd: "Add to Basket",
+            inStock: "In Stock", outStock: "Out of Stock", selectRoute: "Select Substitution Mode:", 
+            emptyCart: "Your basket is empty.", largeView: "Large View", detailView: "Detail View",
+            routes: ["Cancel Line Item", "Substitute with Brand B Milk (+SGD 0.50)", "Contact Customer Service Line"],
+            btnReset: "Clear History & Reset", resetAlert: "All storefront data and cart logs have been cleared successfully!"
+        },
+        zh: {
+            title: "三盛网上超市", langLbl: "语言", userLbl: "用户", username: "贵宾顾客姓名",
+            historyBtn: "购买历史记录", shelfTitle: "每日生鲜百货货架总库", cartTitle: "我的购物车篮",
+            estTotal: "预计总结算金额", btnCheckout: "去收银台核对结算", btnAdd: "加入购物车",
+            inStock: "库存充足", outStock: "缺货中", selectRoute: "请指定配货处理方案:", 
+            emptyCart: "购物车目前空空如也。", largeView: "大图视图", detailView: "详细列表",
+            routes: ["直接取消该商品缺货项", "替换为品牌B高品质鲜奶 (+SGD 0.50)", "保留订单并转交客服专线沟通"],
+            btnReset: "清除历史并重置", resetAlert: "所有超市购物车状态参数与历史采购流水台账已全部重置归零！"
+        }
+    };
+
+    function setLang(lang) {
+        localStorage.setItem('selectedLanguage', lang);
+        document.getElementById('m-lang-en').className = lang === 'en' ? 'active' : '';
+        document.getElementById('m-lang-zh').className = lang === 'zh' ? 'active' : '';
+
+        const d = dictionary[lang];
+        document.getElementById('txt-h1').textContent = d.title;
+        document.getElementById('txt-btn-history').textContent = d.historyBtn;
+        document.getElementById('txt-lang-lbl').textContent = d.langLbl;
+        document.getElementById('txt-user-lbl').textContent = d.userLbl;
+        document.getElementById('txt-username').textContent = d.username;
+        document.getElementById('txt-shelf-title').textContent = d.shelfTitle;
+        document.getElementById('txt-cart-title').textContent = d.cartTitle;
+        document.getElementById('txt-lbl-est').textContent = d.estTotal;
+        document.getElementById('txt-btn-checkout').textContent = d.btnCheckout;
+        document.getElementById('btn-view-large').textContent = d.largeView;
+        document.getElementById('btn-view-detail').textContent = d.detailView;
+        document.getElementById('txt-btn-reset').textContent = d.btnReset;
+
+        renderGrid(lang);
+        renderCart(lang);
+    }
+
+    function setViewMode(mode) {
+        currentViewMode = mode;
+        const grid = document.getElementById('productGridContainer');
+        
+        document.getElementById('btn-view-large').className = mode === 'large' ? 'active' : '';
+        document.getElementById('btn-view-detail').className = mode === 'detail' ? 'active' : '';
+        
+        if (mode === 'large') {
             grid.className = 'product-grid view-large';
-            btnLarge.classList.add('active');
-            btnDetail.classList.remove('active');
-        }
-    }
-
-    function calculateCardTotal(inputField) {
-        let qty = parseInt(inputField.value);
-        if (isNaN(qty) || qty < 0) { qty = 0; inputField.value = 0; }
-        const baseUnitPrice = parseFloat(inputField.getAttribute('data-unit-price'));
-        const targetCard = inputField.closest('.shopee-card');
-        targetCard.querySelector('.calculated-price').textContent = (qty * baseUnitPrice).toFixed(2);
-        calculateGrandTotal();
-    }
-
-    function calculateGrandTotal() {
-        let sum = 0;
-        document.querySelectorAll('.calculated-price').forEach(span => sum += parseFloat(span.textContent));
-        document.getElementById('grandTotalDisplay').textContent = sum.toFixed(2);
-    }
-
-    // Intercept checkout to look if headphones are in the cart
-    function handleCheckoutClick() {
-        const headphonesQty = parseInt(document.getElementById('headphones-qty').value) || 0;
-        
-        if (headphonesQty > 0) {
-            // If they picked headphones, show the options window popup
-            document.getElementById('stockModal').classList.add('open');
         } else {
-            // Otherwise go directly to checkout
-            window.location.href = "page2.html";
+            grid.className = 'product-grid view-detail';
+        }
+        renderGrid(localStorage.getItem('selectedLanguage') || 'en');
+    }
+
+    function renderGrid(lang) {
+        const grid = document.getElementById('productGridContainer');
+        grid.innerHTML = '';
+        const d = dictionary[lang];
+
+        itemsData.forEach((item, i) => {
+            const name = itemNames[lang][i];
+            const isOut = item.stock === 0;
+            
+            const pItem = document.createElement('div');
+            pItem.className = 'product-item';
+            
+            let exceptionHtml = '';
+            if (isOut) {
+                exceptionHtml = `
+                    <div class="exception-box" id="exBox-${item.id}">
+                        <label>${d.selectRoute}</label>
+                        <select id="routeSelect-${item.id}" onchange="saveRouteChoice(${item.id})">
+                            <option value="${d.routes[0]}">${d.routes[0]}</option>
+                            <option value="${d.routes[1]}">${d.routes[1]}</option>
+                            <option value="${d.routes[2]}">${d.routes[2]}</option>
+                        </select>
+                    </div>
+                `;
+            }
+
+            pItem.innerHTML = `
+                <div class="prod-info">
+                    <div class="prod-title-box"><strong>${name}</strong></div>
+                    <div class="prod-price-box">SGD ${item.prices.toFixed(2)}</div>
+                    <div class="stock-status-line ${isOut ? 'status-out' : 'status-instock'}">
+                        ${isOut ? d.outStock : d.inStock + ': ' + item.stock}
+                    </div>
+                    ${currentViewMode === 'large' ? exceptionHtml : ''}
+                </div>
+                ${currentViewMode === 'detail' && isOut ? exceptionHtml : ''}
+                <div class="action-container">
+                    <button class="btn-add-cart" onclick="addToCart(${item.id})" ${isOut ? 'style="background:#f39c12;"' : ''}>
+                        ${d.btnAdd}
+                    </button>
+                </div>
+            `;
+            grid.appendChild(pItem);
+        });
+    }
+
+    function addToCart(id) {
+        if (!cart[`item-${id}`]) cart[`item-${id}`] = 0;
+        cart[`item-${id}`]++;
+        
+        if (id === 1) {
+            saveRouteChoice(1);
+        }
+        
+        saveCartState();
+        renderCart(localStorage.getItem('selectedLanguage') || 'en');
+    }
+
+    function saveRouteChoice(id) {
+        const selectEl = document.getElementById(`routeSelect-${id}`);
+        if(selectEl) {
+            localStorage.setItem('selectedStockOption', selectEl.value);
         }
     }
 
-    // Process selection and navigate
-    function submitModalChoice() {
-        const selectedOption = document.querySelector('input[name="stockOption"]:checked').value;
-        document.getElementById('stockModal').classList.remove('open');
+    function updateQty(id, delta) {
+        if (!cart[`item-${id}`]) return;
+        cart[`item-${id}`] += delta;
+        if (cart[`item-${id}`] <= 0) delete cart[`item-${id}`];
         
-        // You can intercept selectedOption (1, 2, or 3) later for backend use.
-        // Proceeding to page 2 now:
+        saveCartState();
+        renderCart(localStorage.getItem('selectedLanguage') || 'en');
+    }
+
+    function renderCart(lang) {
+        const container = document.getElementById('cartItemsContainer');
+        container.innerHTML = '';
+        let subtotal = 0;
+        let activeLines = 0;
+
+        for (let i = 1; i <= 10; i++) {
+            const qty = cart[`item-${i}`] || 0;
+            if (qty > 0) {
+                activeLines++;
+                const name = itemNames[lang][i-1];
+                const price = itemsData[i-1].prices;
+                subtotal += (qty * price);
+
+                const row = document.createElement('div');
+                row.className = 'cart-item-row';
+                row.innerHTML = `
+                    <div style="max-width:65%; font-weight:600;">${name}</div>
+                    <div class="cart-qty-control">
+                        <button onclick="updateQty(${i}, -1)">-</button>
+                        <span>${qty}</span>
+                        <button onclick="updateQty(${i}, 1)">+</button>
+                    </div>
+                `;
+                container.appendChild(row);
+            }
+        }
+
+        if (activeLines === 0) {
+            container.innerHTML = `<div style="text-align:center; padding:20px; color:#aaa; font-size:13px;">${dictionary[lang].emptyCart}</div>`;
+        }
+
+        document.getElementById('valCartSubtotal').textContent = subtotal.toFixed(2);
+        document.getElementById('valCartTotal').textContent = subtotal.toFixed(2);
+    }
+
+    function saveCartState() {
+        localStorage.setItem('samSengCart', JSON.stringify(cart));
+    }
+
+    function clearSystemHistory() {
+        const lang = localStorage.getItem('selectedLanguage') || 'en';
+        localStorage.removeItem('samSengCart');
+        localStorage.removeItem('selectedStockOption');
+        localStorage.removeItem('samSengTargetRepeatData');
+        localStorage.removeItem('samSengTargetRepeatId');
+        localStorage.removeItem('samSengTargetRepeatDate');
+        
+        alert(dictionary[lang].resetAlert);
+        cart = {};
+        window.location.reload();
+    }
+
+    function proceedToCheckout() {
         window.location.href = "page2.html";
     }
-</script>
 
+    window.addEventListener('DOMContentLoaded', () => {
+        const cached = localStorage.getItem('samSengCart');
+        if (cached) cart = JSON.parse(cached);
+        setViewMode('large');
+        setLang(localStorage.getItem('selectedLanguage') || 'en');
+    });
+</script>
 </body>
 </html>
